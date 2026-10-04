@@ -4,7 +4,7 @@
  */
 
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRw42iwcsYINjZhcxutFKWB1CcPZELYyc9QZyZ_cNsj7nt9FEBDDxD_qGPfVJ-Rbpu/exec";
-const STORAGE_KEY = 'shc_prod_clean_db_v1';
+const STORAGE_KEY = 'shc_prod_clean_db_v2';
 
 // Clean State Initialized Empty (No dummy mock records)
 let state = {
@@ -44,6 +44,12 @@ function initApp() {
     const btn = document.getElementById('dataActionsBtn');
     if (menu && !menu.contains(e.target) && !btn.contains(e.target)) {
       menu.classList.add('hidden');
+    }
+
+    const debitMenu = document.getElementById('debitQuickMenu');
+    const debitBtn = document.getElementById('debitQuickBtn');
+    if (debitMenu && !debitMenu.contains(e.target) && (!debitBtn || !debitBtn.contains(e.target))) {
+      debitMenu.classList.add('hidden');
     }
 
     const recBox = document.getElementById('searchRecommendationsBox');
@@ -171,14 +177,14 @@ function updateSyncStatus(text, color) {
 
   txt.innerText = text;
   pill.className = `hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide ${
-    color === 'emerald' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
-    color === 'amber' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
+    color === 'emerald' ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' :
+    color === 'amber' ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30' :
     'bg-slate-800 text-slate-400 border border-slate-700'
   }`;
 }
 
 // ==========================================
-// 3. TOAST HELPER
+// 3. TOAST & INTERACTION HELPERS
 // ==========================================
 
 let toastTimer = null;
@@ -197,6 +203,11 @@ function showToast(message = "Successfully added!") {
     toast.classList.add('translate-y-10', 'opacity-0', 'pointer-events-none');
     toast.classList.remove('translate-y-0', 'opacity-100');
   }, 2200);
+}
+
+function toggleDebitQuickMenu() {
+  const menu = document.getElementById('debitQuickMenu');
+  if (menu) menu.classList.toggle('hidden');
 }
 
 // ==========================================
@@ -262,14 +273,17 @@ function renderKPIs() {
   balEl.innerText = `${netBalance < 0 ? '-₹ ' : '₹ '}${Math.abs(netBalance).toLocaleString('en-IN')}`;
 
   if (netBalance > 0) {
+    balEl.className = 'font-display text-2xl sm:text-3xl font-black text-emerald-400 tracking-tight font-mono';
     badgeEl.innerText = 'SURPLUS LIQUIDITY';
-    badgeEl.className = 'text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
+    badgeEl.className = 'text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
   } else if (netBalance < 0) {
+    balEl.className = 'font-display text-2xl sm:text-3xl font-black text-rose-400 tracking-tight font-mono';
     badgeEl.innerText = 'DEFICIT (OVERDRAWN)';
-    badgeEl.className = 'text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20';
+    badgeEl.className = 'text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30';
   } else {
+    balEl.className = 'font-display text-2xl sm:text-3xl font-black text-white tracking-tight font-mono';
     badgeEl.innerText = 'NET BALANCED';
-    badgeEl.className = 'text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400';
+    badgeEl.className = 'text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700';
   }
 
   document.getElementById('statPendingTodos').innerText = pendingTodos;
@@ -306,7 +320,6 @@ function renderSparkline() {
 
   if (loadingState) loadingState.classList.add('hidden');
 
-  // Build time series from payments and debit logs
   let transactions = [
     ...state.payments.map(p => ({ date: p.date, val: Number(p.amount) || 0, type: 'credit' })),
     ...state.labour.map(l => ({ date: l.date, val: -(Number(l.amount) || 0), type: 'debit' })),
@@ -322,7 +335,6 @@ function renderSparkline() {
 
   if (emptyState) emptyState.classList.add('hidden');
 
-  // Compute rolling cumulative balance points
   let balance = 0;
   let points = [{ x: 0, y: 0 }];
   transactions.forEach((t, i) => {
@@ -334,11 +346,11 @@ function renderSparkline() {
   const maxY = Math.max(...points.map(p => p.y));
   const rangeY = (maxY - minY) || 1;
   const width = svg.clientWidth || 300;
-  const height = svg.clientHeight || 70;
+  const height = svg.clientHeight || 90;
 
   const coords = points.map((p, idx) => {
     const x = (idx / (points.length - 1)) * (width - 16) + 8;
-    const y = height - 10 - (((p.y - minY) / rangeY) * (height - 24));
+    const y = height - 12 - (((p.y - minY) / rangeY) * (height - 28));
     return `${x},${y}`;
   });
 
@@ -348,7 +360,7 @@ function renderSparkline() {
   svg.innerHTML = `
     <defs>
       <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.35"/>
+        <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.38"/>
         <stop offset="100%" stop-color="#F59E0B" stop-opacity="0"/>
       </linearGradient>
     </defs>
@@ -393,9 +405,9 @@ function renderTodos() {
       </div>
       <div class="flex items-center gap-2 flex-shrink-0">
         <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${
-          t.priority === 'High' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' :
-          t.priority === 'Medium' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
-          'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+          t.priority === 'High' ? 'bg-rose-500/15 text-rose-400 border border-rose-500/30' :
+          t.priority === 'Medium' ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30' :
+          'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
         }">${t.priority}</span>
         <button type="button" onclick="deleteTodoItem(${t.id})" class="text-slate-500 hover:text-rose-400 text-xs px-1">✕</button>
       </div>
@@ -452,7 +464,7 @@ function setTodoFilter(mode) {
   ['All', 'Pending', 'Completed'].forEach(m => {
     const btn = document.getElementById(`todoFilter${m}`);
     if (m.toLowerCase() === mode) {
-      btn.className = "px-2.5 py-1 rounded bg-slate-800 text-white";
+      btn.className = "px-2.5 py-1 rounded bg-slate-800 text-white font-bold";
     } else {
       btn.className = "px-2.5 py-1 rounded text-slate-400 hover:text-white";
     }
@@ -483,14 +495,14 @@ function renderFlats() {
   }
 
   grid.innerHTML = list.map(f => `
-    <div id="item-flat-${f.id}" class="bg-[#0e1628] border border-slate-800 rounded-card p-4 shadow-sm relative">
+    <div id="item-flat-${f.id}" class="bg-[#0c1426] border border-slate-800 rounded-card p-4 shadow-sm relative">
       <div class="flex justify-between items-start mb-2">
         <div>
-          <span class="text-xs font-black font-display text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-500/20">${f.unit_no}</span>
+          <span class="text-xs font-black font-display text-amber-400 bg-amber-500/15 px-2 py-0.5 rounded-lg border border-amber-500/25">${f.unit_no}</span>
           <h3 class="text-sm font-bold font-display text-white mt-1.5">${f.owner_name}</h3>
           <p class="text-[11px] text-slate-400">${f.contact || 'No phone recorded'}</p>
         </div>
-        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">${f.status || 'Active'}</span>
+        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">${f.status || 'Active'}</span>
       </div>
 
       <div class="mt-3">
@@ -579,7 +591,7 @@ function renderChoiceTags() {
     return;
   }
   container.innerHTML = currentChoicesList.map((tag, idx) => `
-    <span class="inline-flex items-center gap-1 bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-md text-[11px] font-medium">
+    <span class="inline-flex items-center gap-1 bg-amber-500/15 text-amber-400 border border-amber-500/25 px-2 py-0.5 rounded-md text-[11px] font-medium">
       ${tag}
       <button type="button" onclick="removeChoiceTag(${idx})" class="hover:text-rose-400 text-xs">✕</button>
     </span>
@@ -801,7 +813,7 @@ function deleteLabour(id) {
 }
 
 // ------------------------------------------
-// TAB: DAILY MATERIALS LOG (QUANTITY INTEGRATED)
+// TAB: DAILY MATERIALS LOG (WITH QUANTITY)
 // ------------------------------------------
 
 function renderMaterials() {
@@ -1031,7 +1043,7 @@ function renderSnags() {
       </div>
       <div class="flex items-center gap-2">
         <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${
-          s.priority === 'High' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' : 'bg-slate-800 text-slate-300'
+          s.priority === 'High' ? 'bg-rose-500/15 text-rose-400 border border-rose-500/30' : 'bg-slate-800 text-slate-300'
         }">${s.priority}</span>
         <button type="button" onclick="editSnag(${s.id})" class="text-slate-400 hover:text-amber-400 text-xs px-1">Edit</button>
         <button type="button" onclick="deleteSnag(${s.id})" class="text-slate-500 hover:text-rose-400 text-xs px-1">✕</button>
@@ -1294,14 +1306,14 @@ function switchTab(tab) {
   currentTab = tab;
   document.querySelectorAll('.tab-view').forEach(v => v.classList.add('hidden'));
   document.querySelectorAll('.tab-button').forEach(b => {
-    b.className = "tab-button flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap text-slate-400 hover:text-white transition";
+    b.className = "tab-button flex items-center gap-1.5 px-3.5 py-2 rounded-lg whitespace-nowrap text-slate-400 hover:text-white transition";
   });
 
   const activeView = document.getElementById(`view-${tab}`);
   const activeBtn = document.getElementById(`tab-${tab}`);
   if (activeView) activeView.classList.remove('hidden');
   if (activeBtn) {
-    activeBtn.className = "tab-button flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap bg-slate-800 text-white shadow-xs font-bold transition";
+    activeBtn.className = "tab-button flex items-center gap-1.5 px-3.5 py-2 rounded-lg whitespace-nowrap bg-slate-800 text-white shadow-xs font-bold transition";
   }
 }
 
