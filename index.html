@@ -2,18 +2,18 @@
 <html lang="en" class="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sri Harshitha Constructions Log Report</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Sri Harshitha Constructions | Site Operations &amp; Ledger</title>
 
-  <!-- SHC Monogram Vector Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='shcG' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23FFD000'/%3E%3Cstop offset='50%25' stop-color='%23FFA200'/%3E%3Cstop offset='100%25' stop-color='%23FF6200'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23shcG)'/%3E%3Crect x='3' y='3' width='58' height='58' rx='13' fill='none' stroke='%23000000' stroke-opacity='0.15' stroke-width='2'/%3E%3Ctext x='32' y='42' font-family='Inter, system-ui, sans-serif' font-size='23' font-weight='900' letter-spacing='-1' fill='%23000000' text-anchor='middle'%3ESHC%3C/text%3E%3C/svg%3E">
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='shcG' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23FFD000'/%3E%3Cstop offset='50%25' stop-color='%23FFA200'/%3E%3Cstop offset='100%25' stop-color='%23FF6200'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23shcG)'/%3E%3Crect x='3' y='3' width='58' height='58' rx='13' fill='none' stroke='%23000000' stroke-opacity='0.15' stroke-width='2'/%3E%3Ctext x='32' y='42' font-family='Plus Jakarta Sans, sans-serif' font-size='23' font-weight='900' letter-spacing='-1' fill='%23000000' text-anchor='middle'%3ESHC%3C/text%3E%3C/svg%3E">
 
-  <!-- Typography -->
+  <!-- Typography: Plus Jakarta Sans (Neo-Grotesk) & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Tailwind CSS & SheetJS CDN -->
+  <!-- Tailwind CSS & SheetJS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -22,8 +22,11 @@
         extend: {
           fontFamily: {
             sans: ['Inter', 'system-ui', 'sans-serif'],
-            mono: ['JetBrains Mono', 'monospace'],
-            number: ['Outfit', 'Inter', 'sans-serif']
+            display: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          },
+          borderRadius: {
+            'card': '12px'
           }
         }
       }
@@ -32,77 +35,78 @@
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="bg-slate-100 dark:bg-[#080d19] text-slate-800 dark:text-slate-100 min-h-screen transition-colors duration-200 antialiased">
+<body class="bg-[#0b101b] text-slate-100 min-h-screen transition-colors duration-200 antialiased font-sans selection:bg-amber-500/30 selection:text-amber-200">
 
-  <!-- CONSOLIDATED EXECUTIVE HEADER -->
-  <header class="no-print sticky top-0 z-40 bg-white/90 dark:bg-[#0c1322]/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 px-4 lg:px-8 py-3 transition-colors shadow-xs">
-    <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3">
+  <!-- Top Executive Header -->
+  <header class="no-print sticky top-0 z-40 bg-[#0d1424]/90 backdrop-blur-md border-b border-slate-800/80 px-3 sm:px-6 py-2.5 transition-colors">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2.5">
       
-      <!-- Brand & Project Info -->
-      <div class="flex items-center gap-3.5">
-        <div class="shc-brand-logo flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center shadow-md">
-          <span class="text-black font-black text-base tracking-tight select-none">SHC</span>
+      <!-- Brand & Project Identity -->
+      <div class="flex items-center gap-3">
+        <div class="shc-brand-logo flex-shrink-0 w-9 h-9 rounded-card flex items-center justify-center shadow-md">
+          <span class="text-black font-extrabold font-display text-sm tracking-tight select-none">SHC</span>
         </div>
         <div>
           <div class="flex items-center gap-2">
-            <h1 class="text-base font-extrabold tracking-tight text-slate-900 dark:text-white uppercase leading-none">
+            <h1 class="text-sm sm:text-base font-extrabold font-display tracking-tight text-white uppercase leading-none">
               Sri Harshitha Constructions
             </h1>
-            <span id="syncPill" class="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-              <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span id="syncText">SHEETS LIVE</span>
+            <span id="syncPill" class="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span id="syncText">LIVE</span>
             </span>
           </div>
-          <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-1">
-            Devi Krishna Villa, Kommadi, Visakhapatnam • <span class="font-mono text-slate-400" id="liveClock">--:--:-- IST</span>
+          <p class="text-[11px] text-slate-400 font-medium mt-0.5 flex items-center gap-1.5 flex-wrap">
+            <span>Devi Krishna Villa, Kommadi</span>
+            <span class="text-slate-600 hidden xs:inline">•</span>
+            <span class="font-mono text-slate-300 text-[10px]" id="liveClock">--:--:-- IST</span>
           </p>
         </div>
       </div>
 
-      <!-- Controls: Global Search, Theme, Actions -->
-      <div class="flex items-center gap-2 self-stretch md:self-auto">
-        <div class="relative flex-grow md:w-72">
+      <!-- Action Utilities & Global Search -->
+      <div class="flex items-center gap-2 w-full sm:w-auto">
+        <div class="relative flex-grow sm:w-64">
           <input 
             type="text" 
             id="globalSearchInput" 
-            placeholder="Search flats, materials, expenses..." 
-            class="w-full bg-slate-100 dark:bg-slate-900/90 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700/70 rounded-xl pl-8 pr-7 py-2 text-xs font-medium focus:ring-2 focus:ring-amber-500/50 focus:outline-none transition"
+            placeholder="Search flats, vouchers, tasks..." 
+            class="w-full bg-slate-900/90 text-slate-100 border border-slate-700/70 rounded-card pl-8 pr-7 py-1.5 text-xs font-medium focus:ring-2 focus:ring-amber-500/40 focus:outline-none transition placeholder:text-slate-500"
             autocomplete="off"
           >
-          <span class="absolute left-2.5 top-2.5 text-slate-400 text-xs">🔍</span>
-          <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-2.5 top-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs px-1">✕</button>
-          
-          <!-- Recommendations dropdown -->
-          <div id="searchRecommendationsBox" class="hidden absolute top-full mt-2 left-0 right-0 bg-white dark:bg-[#0e172a] border border-slate-200 dark:border-slate-700 rounded-xl shadow-2xl z-50 max-h-80 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800"></div>
+          <span class="absolute left-2.5 top-2 text-slate-500 text-xs">🔍</span>
+          <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-2.5 top-1.5 text-slate-400 hover:text-white text-xs px-1">✕</button>
+          <div id="searchRecommendationsBox" class="hidden absolute top-full mt-1.5 left-0 right-0 bg-[#0e1628] border border-slate-700 rounded-card shadow-2xl z-50 max-h-80 overflow-y-auto divide-y divide-slate-800"></div>
         </div>
 
-        <button onclick="toggleTheme()" class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200/50 dark:hover:bg-slate-800 transition" title="Toggle Mode">
+        <!-- Mode Toggle & Dropdown Menu -->
+        <button onclick="toggleTheme()" class="p-2 rounded-card border border-slate-800 text-slate-300 hover:bg-slate-800 transition" title="Toggle Mode">
           <span id="themeIcon">☀️</span>
         </button>
 
         <div class="relative">
-          <button onclick="toggleDataActionsMenu()" id="dataActionsBtn" class="flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-700/80 px-3 py-2 rounded-xl text-xs font-semibold shadow-xs transition">
+          <button onclick="toggleDataActionsMenu()" id="dataActionsBtn" class="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 px-3 py-1.5 rounded-card text-xs font-semibold shadow-xs transition">
             <span>☰</span>
-            <span class="hidden sm:inline">Actions</span>
+            <span class="hidden md:inline">Actions</span>
           </button>
-          <div id="dataActionsMenu" class="hidden absolute right-0 mt-2 w-52 bg-white dark:bg-[#0e172a] border border-slate-200 dark:border-slate-700 rounded-xl shadow-2xl py-1 z-50 text-xs divide-y divide-slate-100 dark:divide-slate-800">
+          <div id="dataActionsMenu" class="hidden absolute right-0 mt-1.5 w-52 bg-[#0e1628] border border-slate-700 rounded-card shadow-2xl py-1 z-50 text-xs divide-y divide-slate-800">
             <div class="py-1">
-              <label class="flex items-center gap-2 px-3 py-2 text-slate-700 dark:text-slate-200 hover:bg-amber-500 hover:text-white cursor-pointer transition">
+              <label class="flex items-center gap-2 px-3 py-2 text-slate-200 hover:bg-amber-500 hover:text-white cursor-pointer transition">
                 <span>📥</span> Import Excel
                 <input type="file" id="bulkExcelInput" accept=".xlsx,.xls,.csv" class="hidden" onchange="handleExcelUpload(event)">
               </label>
-              <button onclick="downloadSampleTemplate()" class="w-full text-left flex items-center gap-2 px-3 py-2 text-slate-700 dark:text-slate-200 hover:bg-amber-500 hover:text-white transition">
+              <button onclick="downloadSampleTemplate()" class="w-full text-left flex items-center gap-2 px-3 py-2 text-slate-200 hover:bg-amber-500 hover:text-white transition">
                 <span>📑</span> Download Template
               </button>
-              <button onclick="exportAuditWorkbook()" class="w-full text-left flex items-center gap-2 px-3 py-2 text-slate-700 dark:text-slate-200 hover:bg-amber-500 hover:text-white transition">
-                <span>📊</span> Export All Records
+              <button onclick="exportAuditWorkbook()" class="w-full text-left flex items-center gap-2 px-3 py-2 text-slate-200 hover:bg-amber-500 hover:text-white transition">
+                <span>📊</span> Export Ledger (.xlsx)
               </button>
             </div>
             <div class="py-1">
-              <button onclick="fetchMasterFromGoogleSheets()" class="w-full text-left flex items-center gap-2 px-3 py-2 text-slate-700 dark:text-slate-200 hover:bg-amber-500 hover:text-white transition">
-                <span>🔄</span> Sync Google Sheets
+              <button onclick="fetchMasterFromGoogleSheets()" class="w-full text-left flex items-center gap-2 px-3 py-2 text-slate-200 hover:bg-amber-500 hover:text-white transition">
+                <span>🔄</span> Refresh from Cloud
               </button>
-              <button onclick="window.print()" class="w-full text-left flex items-center gap-2 px-3 py-2 text-slate-700 dark:text-slate-200 hover:bg-amber-500 hover:text-white transition">
+              <button onclick="window.print()" class="w-full text-left flex items-center gap-2 px-3 py-2 text-slate-200 hover:bg-amber-500 hover:text-white transition">
                 <span>🖨️</span> Print Audit Sheet
               </button>
             </div>
@@ -112,293 +116,359 @@
     </div>
   </header>
 
-  <!-- WORKSPACE & CONTENT -->
-  <main class="max-w-7xl mx-auto px-4 lg:px-8 py-5">
+  <!-- ========================================== -->
+  <!-- MAIN WORKSPACE                             -->
+  <!-- ========================================== -->
+  <main class="max-w-7xl mx-auto px-3 sm:px-6 py-5">
 
-    <!-- DEDICATED AUDIT LETTERHEAD BANNER (PRINT-ONLY) -->
+    <!-- PRINT-ONLY EXECUTIVE LETTERHEAD -->
     <div class="print-only border-b-2 border-slate-900 pb-3 mb-4">
       <div class="flex justify-between items-start">
         <div class="flex items-center gap-3">
-          <div style="background: linear-gradient(135deg, #FFC700, #FF6200); width: 44px; height: 44px; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: 1.5px solid #000;">
-            <span style="color: #000; font-weight: 900; font-size: 16px; font-family: sans-serif;">SHC</span>
+          <div style="background: linear-gradient(135deg, #FFC700, #FF6200); width: 42px; height: 42px; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: 1.5px solid #000;">
+            <span style="color: #000; font-weight: 900; font-size: 15px; font-family: sans-serif;">SHC</span>
           </div>
           <div>
-            <h1 style="font-size: 16px; font-weight: 900; letter-spacing: -0.02em; text-transform: uppercase; margin: 0; color: #0f172a;">
+            <h1 style="font-size: 15px; font-weight: 900; letter-spacing: -0.02em; text-transform: uppercase; margin: 0; color: #0f172a;">
               Sri Harshitha Constructions
             </h1>
-            <p style="font-size: 9.5px; font-weight: 600; color: #475569; margin: 2px 0 0 0;">
+            <p style="font-size: 9px; font-weight: 600; color: #475569; margin: 2px 0 0 0;">
               DEVI KRISHNA VILLA • KOMMADI, VISAKHAPATNAM | AP-RERA REGISTRATION APPROVED
             </p>
           </div>
         </div>
         <div style="text-align: right; font-size: 9px; color: #475569;">
-          <div><strong>OFFICIAL SITE AUDIT REPORT</strong></div>
+          <div><strong>OFFICIAL SITE AUDIT LEDGER</strong></div>
           <div>Audit Ref: <span class="font-mono">SHC/DKV/2026-AUDIT</span></div>
           <div>Generated: <span id="printAuditTimestamp" class="font-mono"></span></div>
         </div>
       </div>
     </div>
 
-    <!-- KPI Metric Summary Tiles -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3.5 mb-6">
-      <div class="kpi-card bg-white dark:bg-[#0c1424] p-4 rounded-xl border border-slate-200/90 dark:border-slate-800 shadow-xs relative overflow-hidden">
-        <div class="flex justify-between items-center text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-          <span>Inflow (Credits)</span>
-          <span class="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-emerald-500/10 text-emerald-500">INFLOW</span>
+    <!-- ========================================== -->
+    <!-- HUMAN-FIRST ASYMMETRICAL DASHBOARD HERO    -->
+    <!-- ========================================== -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-3.5 mb-6">
+      
+      <!-- Dominant Hero Card (Spans 2 columns on desktop) -->
+      <div class="lg:col-span-2 bg-[#0e1628] border border-slate-800 rounded-card p-4 sm:p-5 relative overflow-hidden shadow-sm flex flex-col justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-slate-800/80 pb-3">
+          <div>
+            <span class="text-[10px] font-bold text-slate-400 tracking-wider uppercase">Project Operating Liquidity</span>
+            <div class="flex items-baseline gap-2 mt-1">
+              <h2 id="statBalance" class="font-display text-2xl sm:text-3xl font-extrabold text-white tracking-tight">₹ 0</h2>
+              <span id="statBalanceBadge" class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">NET ZERO</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 text-xs">
+            <div class="flex items-center gap-1.5">
+              <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
+              <span class="text-slate-400">In:</span>
+              <strong id="statInflow" class="text-emerald-400 font-mono">₹ 0</strong>
+            </div>
+            <span class="text-slate-700">|</span>
+            <div class="flex items-center gap-1.5">
+              <span class="h-2 w-2 rounded-full bg-rose-400"></span>
+              <span class="text-slate-400">Out:</span>
+              <strong id="statOutflow" class="text-rose-400 font-mono">₹ 0</strong>
+            </div>
+          </div>
         </div>
-        <div id="statInflow" class="metric-num text-xl lg:text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-1.5">₹ 0</div>
-        <p class="text-[11px] text-slate-400 mt-1">Receipts &amp; advances</p>
+
+        <!-- Micro Trend Visual / Chart & Empty State -->
+        <div class="mt-4 flex-grow flex flex-col justify-center">
+          <!-- Sparkline Track Canvas -->
+          <div id="chartContainer" class="relative h-20 w-full flex items-end">
+            <!-- Loading skeleton fallback -->
+            <div id="chartLoadingState" class="absolute inset-0 flex items-center justify-center text-xs text-slate-500 animate-pulse">
+              <span>Calibrating site ledger timeline...</span>
+            </div>
+            <!-- Empty state fallback -->
+            <div id="chartEmptyState" class="hidden absolute inset-0 flex items-center justify-center text-xs text-slate-500 bg-slate-900/30 rounded-lg border border-dashed border-slate-800">
+              <span>No transactions recorded yet. Record a voucher to start the ledger.</span>
+            </div>
+            <!-- Dynamic SVG Sparkline renders here -->
+            <svg id="sparklineSvg" class="w-full h-full overflow-visible"></svg>
+          </div>
+          <div class="flex justify-between items-center text-[10px] text-slate-500 font-mono pt-1">
+            <span>Month Genesis</span>
+            <span id="chartActiveNote" class="text-amber-400/80">Reconciled Live</span>
+            <span>Current IST</span>
+          </div>
+        </div>
       </div>
 
-      <div class="kpi-card bg-white dark:bg-[#0c1424] p-4 rounded-xl border border-slate-200/90 dark:border-slate-800 shadow-xs relative overflow-hidden">
-        <div class="flex justify-between items-center text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-          <span>Total Expenses</span>
-          <span class="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-rose-500/10 text-rose-500">OUTFLOW</span>
+      <!-- Flanking Stacked Secondary Cards (1 column) -->
+      <div class="grid grid-cols-2 lg:grid-cols-1 gap-3.5">
+        
+        <!-- Checklist Focus Widget -->
+        <div class="bg-[#0e1628] border border-slate-800 rounded-card p-4 shadow-sm flex flex-col justify-between">
+          <div class="flex justify-between items-start">
+            <div>
+              <span class="text-[10px] font-bold text-slate-400 tracking-wider uppercase">Active Checklist</span>
+              <h3 id="statPendingTodos" class="font-display text-2xl font-extrabold text-amber-400 mt-1">0</h3>
+            </div>
+            <span class="text-xs bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded-full border border-amber-500/20 font-bold">Pending</span>
+          </div>
+          <div class="text-[11px] text-slate-400 mt-2 truncate flex items-center gap-1.5">
+            <span class="inline-block w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+            <span id="statRecentTodoSnippet" class="truncate">No open site tasks</span>
+          </div>
         </div>
-        <div id="statOutflow" class="metric-num text-xl lg:text-2xl font-extrabold text-rose-600 dark:text-rose-400 mt-1.5">₹ 0</div>
-        <p class="text-[11px] text-slate-400 mt-1">Labour + Material + Site</p>
-      </div>
 
-      <div class="kpi-card bg-white dark:bg-[#0c1424] p-4 rounded-xl border border-slate-200/90 dark:border-slate-800 shadow-xs relative overflow-hidden">
-        <div class="flex justify-between items-center text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-          <span>Net Cash Balance</span>
-          <span id="statBalanceBadge" class="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-slate-500/10 text-slate-500">NET</span>
+        <!-- Quality Snags & Unit Count Widget -->
+        <div class="bg-[#0e1628] border border-slate-800 rounded-card p-4 shadow-sm flex flex-col justify-between">
+          <div class="flex justify-between items-start">
+            <div>
+              <span class="text-[10px] font-bold text-slate-400 tracking-wider uppercase">Registered Units</span>
+              <h3 id="statTotalFlats" class="font-display text-2xl font-extrabold text-slate-100 mt-1">0</h3>
+            </div>
+            <span class="text-xs bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded-full border border-blue-500/20 font-bold">DKV Units</span>
+          </div>
+          <div class="text-[11px] text-slate-400 mt-2 flex items-center justify-between">
+            <span id="statOpenSnagsCount" class="text-slate-400">0 snags flagged</span>
+            <button onclick="switchTab('snags')" class="text-amber-400 hover:underline font-semibold text-[10px]">Inspect →</button>
+          </div>
         </div>
-        <div id="statBalance" class="metric-num text-xl lg:text-2xl font-extrabold text-slate-900 dark:text-white mt-1.5">₹ 0</div>
-        <p class="text-[11px] text-slate-400 mt-1">Available site liquidity</p>
-      </div>
 
-      <div class="kpi-card bg-white dark:bg-[#0c1424] p-4 rounded-xl border border-slate-200/90 dark:border-slate-800 shadow-xs relative overflow-hidden">
-        <div class="flex justify-between items-center text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-          <span>Active Tasks</span>
-          <span class="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-amber-500/10 text-amber-500">PENDING</span>
-        </div>
-        <div id="statPendingTodos" class="metric-num text-xl lg:text-2xl font-extrabold text-amber-500 mt-1.5">0</div>
-        <p class="text-[11px] text-slate-400 mt-1">Checklist items to clear</p>
       </div>
     </div>
 
     <!-- Active Search Filter Banner -->
-    <div id="activeFilterPill" class="hidden no-print mb-4 px-3.5 py-2 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between text-xs text-amber-600 dark:text-amber-400 font-medium">
+    <div id="activeFilterPill" class="hidden no-print mb-4 px-3 py-2 rounded-card bg-amber-500/10 border border-amber-500/30 flex items-center justify-between text-xs text-amber-400 font-medium">
       <div class="flex items-center gap-2">
         <span>Filtered by keyword:</span>
         <strong id="activeFilterTerm" class="font-bold underline"></strong>
         <span id="activeFilterCount" class="text-[11px] bg-amber-500/20 px-2 py-0.5 rounded-full font-bold"></span>
       </div>
-      <button onclick="clearSearch()" class="hover:underline font-bold">Clear ✕</button>
+      <button onclick="clearSearch()" class="hover:underline font-bold text-xs">Clear ✕</button>
     </div>
 
-    <!-- Segmented Tab Navigation -->
-    <div class="no-print bg-slate-200/70 dark:bg-[#0c1424] p-1 rounded-2xl flex items-center gap-1 overflow-x-auto text-xs font-semibold mb-6 border border-slate-200/80 dark:border-slate-800/80">
-      <button onclick="switchTab('todos')" id="tab-todos" class="tab-button flex items-center gap-2 px-3.5 py-2 rounded-xl whitespace-nowrap bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs font-bold">
-        <span>☑️</span> Daily To-Do List <span id="badge-todos" class="px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400 text-[10px] font-bold">0</span>
+    <!-- Segmented Navigation Tab Bar -->
+    <div class="no-print bg-[#0e1628] p-1 rounded-card flex items-center gap-1 overflow-x-auto text-xs font-semibold mb-6 border border-slate-800 scrollbar-none">
+      <button onclick="switchTab('todos')" id="tab-todos" class="tab-button flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap bg-slate-800 text-white shadow-xs font-bold transition">
+        <span>☑️</span> Daily Tasks <span id="badge-todos" class="px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-400 text-[10px]">0</span>
       </button>
-      <button onclick="switchTab('flats')" id="tab-flats" class="tab-button flex items-center gap-2 px-3.5 py-2 rounded-xl whitespace-nowrap text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition">
-        <span>🏢</span> Unit Directory <span id="badge-flats" class="px-1.5 py-0.2 rounded-full bg-slate-300/60 dark:bg-slate-700/60 text-[10px]">0</span>
+      <button onclick="switchTab('flats')" id="tab-flats" class="tab-button flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap text-slate-400 hover:text-white transition">
+        <span>🏢</span> Units <span id="badge-flats" class="px-1.5 py-0.2 rounded-full bg-slate-800 text-[10px]">0</span>
       </button>
-      <button onclick="switchTab('payments')" id="tab-payments" class="tab-button flex items-center gap-2 px-3.5 py-2 rounded-xl whitespace-nowrap text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition">
-        <span>💳</span> Financial Ledger <span id="badge-payments" class="px-1.5 py-0.2 rounded-full bg-slate-300/60 dark:bg-slate-700/60 text-[10px]">0</span>
+      <button onclick="switchTab('payments')" id="tab-payments" class="tab-button flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap text-slate-400 hover:text-white transition">
+        <span>💳</span> Financials <span id="badge-payments" class="px-1.5 py-0.2 rounded-full bg-slate-800 text-[10px]">0</span>
       </button>
-      <button onclick="switchTab('labour')" id="tab-labour" class="tab-button flex items-center gap-2 px-3.5 py-2 rounded-xl whitespace-nowrap text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition">
-        <span>👷</span> Daily Labour <span id="badge-labour" class="px-1.5 py-0.2 rounded-full bg-slate-300/60 dark:bg-slate-700/60 text-[10px]">0</span>
+      <button onclick="switchTab('labour')" id="tab-labour" class="tab-button flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap text-slate-400 hover:text-white transition">
+        <span>👷</span> Labour <span id="badge-labour" class="px-1.5 py-0.2 rounded-full bg-slate-800 text-[10px]">0</span>
       </button>
-      <button onclick="switchTab('materials')" id="tab-materials" class="tab-button flex items-center gap-2 px-3.5 py-2 rounded-xl whitespace-nowrap text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition">
-        <span>🧱</span> Daily Materials <span id="badge-materials" class="px-1.5 py-0.2 rounded-full bg-slate-300/60 dark:bg-slate-700/60 text-[10px]">0</span>
+      <button onclick="switchTab('materials')" id="tab-materials" class="tab-button flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap text-slate-400 hover:text-white transition">
+        <span>🧱</span> Materials <span id="badge-materials" class="px-1.5 py-0.2 rounded-full bg-slate-800 text-[10px]">0</span>
       </button>
-      <button onclick="switchTab('expenses')" id="tab-expenses" class="tab-button flex items-center gap-2 px-3.5 py-2 rounded-xl whitespace-nowrap text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition">
-        <span>💸</span> Other Expenses <span id="badge-expenses" class="px-1.5 py-0.2 rounded-full bg-slate-300/60 dark:bg-slate-700/60 text-[10px]">0</span>
+      <button onclick="switchTab('expenses')" id="tab-expenses" class="tab-button flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap text-slate-400 hover:text-white transition">
+        <span>💸</span> Expenses <span id="badge-expenses" class="px-1.5 py-0.2 rounded-full bg-slate-800 text-[10px]">0</span>
       </button>
-      <button onclick="switchTab('snags')" id="tab-snags" class="tab-button flex items-center gap-2 px-3.5 py-2 rounded-xl whitespace-nowrap text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition">
-        <span>📋</span> Snags &amp; Tasks <span id="badge-snags" class="px-1.5 py-0.2 rounded-full bg-slate-300/60 dark:bg-slate-700/60 text-[10px]">0</span>
+      <button onclick="switchTab('snags')" id="tab-snags" class="tab-button flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap text-slate-400 hover:text-white transition">
+        <span>📋</span> Snags <span id="badge-snags" class="px-1.5 py-0.2 rounded-full bg-slate-800 text-[10px]">0</span>
       </button>
     </div>
 
-    <!-- TAB 1: DAILY TO-DO LIST -->
+    <!-- ========================================== -->
+    <!-- TAB 1: DAILY TO-DO LIST                   -->
+    <!-- ========================================== -->
     <section id="view-todos" class="tab-view">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
         <div>
-          <h2 class="audit-section-title text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <h2 class="audit-section-title text-base font-bold text-white flex items-center gap-2">
             <span>☑️</span> Daily Site To-Do Checklist
           </h2>
-          <p class="text-xs text-slate-500 dark:text-slate-400 no-print">Track fast daily actionable tasks, supervisor follow-ups, and inspection checks</p>
+          <p class="text-xs text-slate-400 no-print">Fast site follow-ups, inspection items, and subcontractor tracking</p>
         </div>
-        <div class="no-print inline-flex rounded-xl p-1 bg-slate-200/80 dark:bg-slate-800/80 text-[11px] font-semibold self-start sm:self-auto">
-          <button type="button" onclick="setTodoFilter('all')" id="todoFilterAll" class="px-3 py-1 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs">All</button>
-          <button type="button" onclick="setTodoFilter('pending')" id="todoFilterPending" class="px-3 py-1 rounded-lg text-slate-500 hover:text-slate-900 dark:hover:text-white">Active</button>
-          <button type="button" onclick="setTodoFilter('completed')" id="todoFilterCompleted" class="px-3 py-1 rounded-lg text-slate-500 hover:text-slate-900 dark:hover:text-white">Done</button>
+        <div class="no-print inline-flex rounded-lg p-0.5 bg-slate-900 border border-slate-800 text-[11px] font-semibold self-start sm:self-auto">
+          <button type="button" onclick="setTodoFilter('all')" id="todoFilterAll" class="px-2.5 py-1 rounded bg-slate-800 text-white">All</button>
+          <button type="button" onclick="setTodoFilter('pending')" id="todoFilterPending" class="px-2.5 py-1 rounded text-slate-400 hover:text-white">Active</button>
+          <button type="button" onclick="setTodoFilter('completed')" id="todoFilterCompleted" class="px-2.5 py-1 rounded text-slate-400 hover:text-white">Done</button>
         </div>
       </div>
 
-      <!-- Quick Add Task Bar -->
-      <form onsubmit="handleQuickTodoSubmit(event)" class="no-print mb-4 flex flex-col sm:flex-row items-center gap-2 bg-white dark:bg-[#0c1424] p-2 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
+      <!-- Command Style Quick Task Input -->
+      <form onsubmit="handleQuickTodoSubmit(event)" class="no-print mb-4 flex flex-col sm:flex-row items-center gap-2 bg-[#0e1628] p-2 rounded-card border border-slate-800 shadow-sm">
         <input 
           type="text" 
           id="quickTodoText" 
-          placeholder="Type a new site task and press Enter (e.g. Balcony curing inspection)..." 
-          class="w-full bg-transparent text-slate-900 dark:text-white px-3 py-2 text-xs font-medium focus:outline-none placeholder:text-slate-400"
+          placeholder="Type an actionable site item and press Enter..." 
+          class="w-full bg-transparent text-white px-3 py-2 text-xs font-medium focus:outline-none placeholder:text-slate-500"
           required
         >
         <div class="flex items-center gap-2 w-full sm:w-auto flex-shrink-0 px-1">
-          <select id="quickTodoPriority" class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-medium focus:outline-none">
+          <select id="quickTodoPriority" class="bg-slate-900 text-slate-200 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-medium focus:outline-none">
             <option value="High">🔴 High</option>
             <option value="Medium" selected>🟡 Medium</option>
             <option value="Low">🟢 Low</option>
           </select>
-          <button type="submit" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-600 text-white font-bold px-4 py-1.5 rounded-lg text-xs transition shadow-xs whitespace-nowrap">
+          <button type="submit" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-600 text-black font-bold font-display px-4 py-1.5 rounded-lg text-xs transition shadow-xs whitespace-nowrap">
             + Add Task
           </button>
         </div>
       </form>
 
-      <div class="bg-white dark:bg-[#0c1424] rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
-        <div id="todoItemsContainer" class="divide-y divide-slate-100 dark:divide-slate-800/80"></div>
+      <div class="bg-[#0e1628] rounded-card border border-slate-800 shadow-sm overflow-hidden">
+        <div id="todoItemsContainer" class="divide-y divide-slate-800/80"></div>
       </div>
     </section>
 
-    <!-- TAB 2: UNIT DIRECTORY -->
+    <!-- ========================================== -->
+    <!-- TAB 2: UNIT DIRECTORY                     -->
+    <!-- ========================================== -->
     <section id="view-flats" class="tab-view hidden">
-      <div class="flex justify-between items-center mb-4">
+      <div class="flex justify-between items-center mb-3">
         <div>
-          <h2 class="audit-section-title text-base font-bold text-slate-900 dark:text-white">Unit Directory &amp; Custom Choices</h2>
-          <p class="text-xs text-slate-500 dark:text-slate-400 no-print">Record unit specs, buyer choices (marble, fittings, woodwork), and handover timeline</p>
+          <h2 class="audit-section-title text-base font-bold text-white">Unit Directory &amp; Custom Choices</h2>
+          <p class="text-xs text-slate-400 no-print">Allottee profiles, Italian marble choices, woodwork, and handover history</p>
         </div>
-        <button type="button" onclick="openModal('flatModal')" class="no-print bg-amber-500 hover:bg-amber-600 text-white font-bold px-3.5 py-2 rounded-xl text-xs shadow-xs transition">
+        <button type="button" onclick="openModal('flatModal')" class="no-print bg-amber-500 hover:bg-amber-600 text-black font-bold font-display px-3.5 py-2 rounded-card text-xs shadow-xs transition">
           + Register Unit
         </button>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="flatsGrid"></div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5" id="flatsGrid"></div>
     </section>
 
-    <!-- TAB 3: FINANCIAL LEDGER -->
+    <!-- ========================================== -->
+    <!-- TAB 3: FINANCIAL LEDGER                   -->
+    <!-- ========================================== -->
     <section id="view-payments" class="tab-view hidden">
-      <div class="flex justify-between items-center mb-4">
+      <div class="flex justify-between items-center mb-3">
         <div>
-          <h2 class="audit-section-title text-base font-bold text-slate-900 dark:text-white">Universal Financial Payments &amp; Receipts</h2>
-          <p class="text-xs text-slate-500 dark:text-slate-400 no-print">Record buyer milestone collections, contracts, and booking advances</p>
+          <h2 class="audit-section-title text-base font-bold text-white">Universal Financial Ledger</h2>
+          <p class="text-xs text-slate-400 no-print">Booking advances, buyer milestone receipts, and contract disbursements</p>
         </div>
-        <button type="button" onclick="openModal('paymentModal')" class="no-print bg-amber-500 hover:bg-amber-600 text-white font-bold px-3.5 py-2 rounded-xl text-xs shadow-xs transition">
-          + Record Payment
+        <button type="button" onclick="openModal('paymentModal')" class="no-print bg-amber-500 hover:bg-amber-600 text-black font-bold font-display px-3.5 py-2 rounded-card text-xs shadow-xs transition">
+          + Record Voucher
         </button>
       </div>
-      <div class="bg-white dark:bg-[#0c1424] rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-x-auto">
+      <div class="bg-[#0e1628] rounded-card border border-slate-800 shadow-sm overflow-x-auto">
         <table class="w-full text-left text-xs">
-          <thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-300 font-bold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
+          <thead class="bg-slate-900/60 text-slate-300 font-bold uppercase tracking-wider border-b border-slate-800">
             <tr>
-              <th class="p-3.5">Date</th>
-              <th class="p-3.5">Voucher ID</th>
-              <th class="p-3.5">Payee / Entity</th>
-              <th class="p-3.5">Category</th>
-              <th class="p-3.5">Mode</th>
-              <th class="p-3.5">Amount (₹)</th>
-              <th class="p-3.5">Remarks / Ref</th>
-              <th class="p-3.5 text-right no-print">Actions</th>
+              <th class="p-3">Date</th>
+              <th class="p-3">Voucher ID</th>
+              <th class="p-3">Payee / Entity</th>
+              <th class="p-3">Category</th>
+              <th class="p-3">Mode</th>
+              <th class="p-3">Amount (₹)</th>
+              <th class="p-3">Remarks / UTR</th>
+              <th class="p-3 text-right no-print">Actions</th>
             </tr>
           </thead>
-          <tbody id="paymentsTableBody" class="divide-y divide-slate-100 dark:divide-slate-800/80"></tbody>
+          <tbody id="paymentsTableBody" class="divide-y divide-slate-800/80"></tbody>
         </table>
       </div>
     </section>
 
-    <!-- TAB 4: DAILY LABOUR -->
+    <!-- ========================================== -->
+    <!-- TAB 4: DAILY LABOUR                       -->
+    <!-- ========================================== -->
     <section id="view-labour" class="tab-view hidden">
-      <div class="flex justify-between items-center mb-4">
+      <div class="flex justify-between items-center mb-3">
         <div>
-          <h2 class="audit-section-title text-base font-bold text-slate-900 dark:text-white">Daily Labour &amp; Contractor Wages</h2>
-          <p class="text-xs text-slate-500 dark:text-slate-400 no-print">Record daily labour attendance, contractor wages, and site works</p>
+          <h2 class="audit-section-title text-base font-bold text-white">Daily Labour &amp; Contractor Wages</h2>
+          <p class="text-xs text-slate-400 no-print">Tile masons, bar benders, centering crews, and daily muster wage payouts</p>
         </div>
-        <button type="button" onclick="openModal('labourModal')" class="no-print bg-amber-500 hover:bg-amber-600 text-white font-bold px-3.5 py-2 rounded-xl text-xs shadow-xs transition">
+        <button type="button" onclick="openModal('labourModal')" class="no-print bg-amber-500 hover:bg-amber-600 text-black font-bold font-display px-3.5 py-2 rounded-card text-xs shadow-xs transition">
           + Log Labour
         </button>
       </div>
-      <div class="bg-white dark:bg-[#0c1424] rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-x-auto">
+      <div class="bg-[#0e1628] rounded-card border border-slate-800 shadow-sm overflow-x-auto">
         <table class="w-full text-left text-xs">
-          <thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-300 font-bold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
+          <thead class="bg-slate-900/60 text-slate-300 font-bold uppercase tracking-wider border-b border-slate-800">
             <tr>
-              <th class="p-3.5">Date</th>
-              <th class="p-3.5">Person / Contractor</th>
-              <th class="p-3.5">Purpose / Work Area</th>
-              <th class="p-3.5">Amount (₹)</th>
-              <th class="p-3.5">Remarks</th>
-              <th class="p-3.5 text-right no-print">Actions</th>
+              <th class="p-3">Date</th>
+              <th class="p-3">Person / Crew</th>
+              <th class="p-3">Purpose / Work Area</th>
+              <th class="p-3">Amount (₹)</th>
+              <th class="p-3">Remarks</th>
+              <th class="p-3 text-right no-print">Actions</th>
             </tr>
           </thead>
-          <tbody id="labourTableBody" class="divide-y divide-slate-100 dark:divide-slate-800/80"></tbody>
+          <tbody id="labourTableBody" class="divide-y divide-slate-800/80"></tbody>
         </table>
       </div>
     </section>
 
-    <!-- TAB 5: DAILY MATERIALS (WITH QUANTITY) -->
+    <!-- ========================================== -->
+    <!-- TAB 5: DAILY MATERIALS (WITH QUANTITY)    -->
+    <!-- ========================================== -->
     <section id="view-materials" class="tab-view hidden">
-      <div class="flex justify-between items-center mb-4">
+      <div class="flex justify-between items-center mb-3">
         <div>
-          <h2 class="audit-section-title text-base font-bold text-slate-900 dark:text-white">Daily Materials Consumption &amp; Invoices</h2>
-          <p class="text-xs text-slate-500 dark:text-slate-400 no-print">Track cement, steel, sand, fittings, supplier bills, quantity, and destination</p>
+          <h2 class="audit-section-title text-base font-bold text-white">Daily Materials Consumption &amp; Invoices</h2>
+          <p class="text-xs text-slate-400 no-print">Cement, TMT steel, coarse aggregate, sand, and electrical conduit consignments</p>
         </div>
-        <button type="button" onclick="openModal('materialsModal')" class="no-print bg-amber-500 hover:bg-amber-600 text-white font-bold px-3.5 py-2 rounded-xl text-xs shadow-xs transition">
+        <button type="button" onclick="openModal('materialsModal')" class="no-print bg-amber-500 hover:bg-amber-600 text-black font-bold font-display px-3.5 py-2 rounded-card text-xs shadow-xs transition">
           + Log Material
         </button>
       </div>
-      <div class="bg-white dark:bg-[#0c1424] rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-x-auto">
+      <div class="bg-[#0e1628] rounded-card border border-slate-800 shadow-sm overflow-x-auto">
         <table class="w-full text-left text-xs">
-          <thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-300 font-bold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
+          <thead class="bg-slate-900/60 text-slate-300 font-bold uppercase tracking-wider border-b border-slate-800">
             <tr>
-              <th class="p-3.5">Date</th>
-              <th class="p-3.5">Material Name</th>
-              <th class="p-3.5">Quantity</th>
-              <th class="p-3.5">Supplier / Vendor</th>
-              <th class="p-3.5">Purpose / Placement</th>
-              <th class="p-3.5">Amount (₹)</th>
-              <th class="p-3.5">Remarks</th>
-              <th class="p-3.5 text-right no-print">Actions</th>
+              <th class="p-3">Date</th>
+              <th class="p-3">Material Name</th>
+              <th class="p-3">Quantity</th>
+              <th class="p-3">Supplier / Vendor</th>
+              <th class="p-3">Placement Area</th>
+              <th class="p-3">Amount (₹)</th>
+              <th class="p-3">Remarks</th>
+              <th class="p-3 text-right no-print">Actions</th>
             </tr>
           </thead>
-          <tbody id="materialsTableBody" class="divide-y divide-slate-100 dark:divide-slate-800/80"></tbody>
+          <tbody id="materialsTableBody" class="divide-y divide-slate-800/80"></tbody>
         </table>
       </div>
     </section>
 
-    <!-- TAB 6: OTHER EXPENSES -->
+    <!-- ========================================== -->
+    <!-- TAB 6: OTHER EXPENSES                     -->
+    <!-- ========================================== -->
     <section id="view-expenses" class="tab-view hidden">
-      <div class="flex justify-between items-center mb-4">
+      <div class="flex justify-between items-center mb-3">
         <div>
-          <h2 class="audit-section-title text-base font-bold text-slate-900 dark:text-white">Other Site &amp; Administrative Expenses</h2>
-          <p class="text-xs text-slate-500 dark:text-slate-400 no-print">Track site petty cash, fuel, generator maintenance, municipal permits, and miscellaneous purchases</p>
+          <h2 class="audit-section-title text-base font-bold text-white">Other Site &amp; Administrative Expenses</h2>
+          <p class="text-xs text-slate-400 no-print">Generator diesel, water tankers, GVMC permits, and site office petty cash</p>
         </div>
-        <button type="button" onclick="openModal('expenseModal')" class="no-print bg-amber-500 hover:bg-amber-600 text-white font-bold px-3.5 py-2 rounded-xl text-xs shadow-xs transition">
+        <button type="button" onclick="openModal('expenseModal')" class="no-print bg-amber-500 hover:bg-amber-600 text-black font-bold font-display px-3.5 py-2 rounded-card text-xs shadow-xs transition">
           + Other Expenses
         </button>
       </div>
-      <div class="bg-white dark:bg-[#0c1424] rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-x-auto">
+      <div class="bg-[#0e1628] rounded-card border border-slate-800 shadow-sm overflow-x-auto">
         <table class="w-full text-left text-xs">
-          <thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-300 font-bold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
+          <thead class="bg-slate-900/60 text-slate-300 font-bold uppercase tracking-wider border-b border-slate-800">
             <tr>
-              <th class="p-3.5">Date</th>
-              <th class="p-3.5">Expense Name / Payee</th>
-              <th class="p-3.5">Amount (₹)</th>
-              <th class="p-3.5">Purpose / Remarks</th>
-              <th class="p-3.5 text-right no-print">Actions</th>
+              <th class="p-3">Date</th>
+              <th class="p-3">Expense Item / Payee</th>
+              <th class="p-3">Amount (₹)</th>
+              <th class="p-3">Purpose / Remarks</th>
+              <th class="p-3 text-right no-print">Actions</th>
             </tr>
           </thead>
-          <tbody id="expensesTableBody" class="divide-y divide-slate-100 dark:divide-slate-800/80"></tbody>
+          <tbody id="expensesTableBody" class="divide-y divide-slate-800/80"></tbody>
         </table>
       </div>
     </section>
 
-    <!-- TAB 7: SNAGS REGISTER -->
+    <!-- ========================================== -->
+    <!-- TAB 7: SNAGS & TASKS                      -->
+    <!-- ========================================== -->
     <section id="view-snags" class="tab-view hidden">
-      <div class="flex justify-between items-center mb-4">
+      <div class="flex justify-between items-center mb-3">
         <div>
-          <h2 class="audit-section-title text-base font-bold text-slate-900 dark:text-white">Quality Snag &amp; Civil Tasks Register</h2>
-          <p class="text-xs text-slate-500 dark:text-slate-400 no-print">Track snagging items, supervisor sign-offs, and critical path items</p>
+          <h2 class="audit-section-title text-base font-bold text-white">Quality Snag &amp; Civil Tasks Register</h2>
+          <p class="text-xs text-slate-400 no-print">Quality punch-lists, engineer sign-offs, and critical path inspections</p>
         </div>
-        <button type="button" onclick="openModal('snagModal')" class="no-print bg-amber-500 hover:bg-amber-600 text-white font-bold px-3.5 py-2 rounded-xl text-xs shadow-xs transition">
+        <button type="button" onclick="openModal('snagModal')" class="no-print bg-amber-500 hover:bg-amber-600 text-black font-bold font-display px-3.5 py-2 rounded-card text-xs shadow-xs transition">
           + New Snag / Task
         </button>
       </div>
-      <div class="bg-white dark:bg-[#0c1424] rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs divide-y divide-slate-100 dark:divide-slate-800/80" id="snagsContainer"></div>
+      <div class="bg-[#0e1628] rounded-card border border-slate-800 shadow-sm divide-y divide-slate-800/80" id="snagsContainer"></div>
     </section>
 
-    <!-- OFFICIAL AUDIT VERIFICATION & SIGN-OFF (PRINT-ONLY) -->
+    <!-- PRINT-ONLY VERIFICATION SIGN-OFF -->
     <div class="print-only audit-signatures">
       <div class="grid grid-cols-3 gap-6 pt-6 text-center text-[10px]">
         <div>
@@ -425,33 +495,33 @@
   </main>
 
   <!-- ========================================== -->
-  <!-- MODALS                                     -->
+  <!-- MODAL DIALOGS                              -->
   <!-- ========================================== -->
 
   <!-- UNIT MODAL -->
-  <div id="flatModal" class="modal-backdrop hidden fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-[#0e1628] rounded-2xl border border-slate-200 dark:border-slate-700 w-full max-w-lg p-5 shadow-2xl">
-      <h3 class="text-base font-bold mb-3 text-slate-900 dark:text-white" id="flatModalTitle">Register / Edit Unit</h3>
+  <div id="flatModal" class="modal-backdrop hidden fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-[#0e1628] rounded-card border border-slate-700 w-full max-w-lg p-5 shadow-2xl">
+      <h3 class="text-base font-bold font-display mb-3 text-white" id="flatModalTitle">Register / Edit Unit</h3>
       <form onsubmit="handleFlatSubmit(event)" class="space-y-3 text-xs">
         <input type="hidden" id="editFlatId">
         <div class="grid grid-cols-2 gap-2.5">
           <div>
-            <label class="block text-slate-500 mb-1">Unit Number</label>
-            <input id="flatUnitNo" placeholder="e.g. 505" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-medium" required>
+            <label class="block text-slate-400 mb-1">Unit Number</label>
+            <input id="flatUnitNo" placeholder="e.g. 505" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-medium text-white" required>
           </div>
           <div>
-            <label class="block text-slate-500 mb-1">Owner / Allottee</label>
-            <input id="flatOwner" placeholder="e.g. Renuka" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-medium" required>
+            <label class="block text-slate-400 mb-1">Owner / Allottee</label>
+            <input id="flatOwner" placeholder="e.g. K. V. Sharma" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-medium text-white" required>
           </div>
         </div>
         <div class="grid grid-cols-2 gap-2.5">
           <div>
-            <label class="block text-slate-500 mb-1">Contact Phone</label>
-            <input id="flatContact" placeholder="Phone Number" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-medium">
+            <label class="block text-slate-400 mb-1">Contact Phone</label>
+            <input id="flatContact" placeholder="Phone Number" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-medium text-white">
           </div>
           <div>
-            <label class="block text-slate-500 mb-1">Status / Phase</label>
-            <select id="flatStatus" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-medium">
+            <label class="block text-slate-400 mb-1">Status / Phase</label>
+            <select id="flatStatus" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-medium text-white">
               <option value="Interior Fit-Out Phase">Interior Fit-Out Phase</option>
               <option value="Under Construction">Under Construction</option>
               <option value="Handed Over">Handed Over</option>
@@ -460,59 +530,59 @@
           </div>
         </div>
         <div>
-          <label class="block text-slate-500 mb-1">Buyer Specification Choices (Bullet Points)</label>
+          <label class="block text-slate-400 mb-1">Buyer Specification Choices (Bullet Points)</label>
           <div class="flex gap-2 mb-2">
-            <input id="newChoiceInput" placeholder="Add custom choice (press Enter to tag)" class="flex-grow bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2">
-            <button type="button" onclick="addChoiceTagFromInput()" class="bg-slate-200 dark:bg-slate-800 px-3 py-2 rounded-xl font-bold hover:bg-amber-500 hover:text-white transition">+ Add</button>
+            <input id="newChoiceInput" placeholder="Add custom spec (press Enter to tag)" class="flex-grow bg-slate-900 border border-slate-700 rounded-lg p-2 text-white">
+            <button type="button" onclick="addChoiceTagFromInput()" class="bg-slate-800 px-3 py-2 rounded-lg font-bold hover:bg-amber-500 hover:text-black transition">+ Add</button>
           </div>
           <div class="flex flex-wrap gap-1.5 mb-2">
-            <button type="button" onclick="addChoicePreset('Teak Wood Doors')" class="text-[10px] bg-slate-100 dark:bg-slate-800 hover:bg-amber-500 hover:text-white px-2 py-0.5 rounded-full transition">+ Teak Wood Doors</button>
-            <button type="button" onclick="addChoicePreset('Italian Marble Flooring')" class="text-[10px] bg-slate-100 dark:bg-slate-800 hover:bg-amber-500 hover:text-white px-2 py-0.5 rounded-full transition">+ Italian Marble</button>
-            <button type="button" onclick="addChoicePreset('Kohler Matte Black Fittings')" class="text-[10px] bg-slate-100 dark:bg-slate-800 hover:bg-amber-500 hover:text-white px-2 py-0.5 rounded-full transition">+ Kohler Fittings</button>
-            <button type="button" onclick="addChoicePreset('Asian Paints Royale Emulsion')" class="text-[10px] bg-slate-100 dark:bg-slate-800 hover:bg-amber-500 hover:text-white px-2 py-0.5 rounded-full transition">+ Royale Emulsion</button>
+            <button type="button" onclick="addChoicePreset('Teak Wood Doors')" class="text-[10px] bg-slate-800/80 hover:bg-amber-500 hover:text-black px-2 py-0.5 rounded-full transition">+ Teak Wood Doors</button>
+            <button type="button" onclick="addChoicePreset('Italian Marble Flooring')" class="text-[10px] bg-slate-800/80 hover:bg-amber-500 hover:text-black px-2 py-0.5 rounded-full transition">+ Italian Marble</button>
+            <button type="button" onclick="addChoicePreset('Kohler Matte Black Fittings')" class="text-[10px] bg-slate-800/80 hover:bg-amber-500 hover:text-black px-2 py-0.5 rounded-full transition">+ Kohler Fittings</button>
+            <button type="button" onclick="addChoicePreset('Asian Paints Royale Emulsion')" class="text-[10px] bg-slate-800/80 hover:bg-amber-500 hover:text-black px-2 py-0.5 rounded-full transition">+ Royale Emulsion</button>
           </div>
-          <div id="choiceTagsList" class="flex flex-wrap gap-1.5 min-h-[38px] p-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl"></div>
+          <div id="choiceTagsList" class="flex flex-wrap gap-1.5 min-h-[38px] p-2 bg-slate-900 border border-slate-800 rounded-lg"></div>
         </div>
         <div>
-          <label class="block text-slate-500 mb-1">Handover &amp; Notes History (Press Enter to Save)</label>
-          <textarea id="flatHistory" rows="2" placeholder="Record chronological milestones or choices log..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-medium"></textarea>
+          <label class="block text-slate-400 mb-1">Handover &amp; Notes History (Press Enter to Save)</label>
+          <textarea id="flatHistory" rows="2" placeholder="Chronological milestones or choices log..." class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-medium text-white"></textarea>
         </div>
         <div class="flex justify-end gap-2 pt-2">
-          <button type="button" onclick="closeModal('flatModal')" class="px-4 py-2 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 font-semibold">Cancel</button>
-          <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-white px-5 py-2 rounded-xl font-bold transition">Save Unit</button>
+          <button type="button" onclick="closeModal('flatModal')" class="px-4 py-2 text-slate-400 hover:text-white font-semibold">Cancel</button>
+          <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-black font-display px-5 py-2 rounded-lg font-bold transition">Save Unit</button>
         </div>
       </form>
     </div>
   </div>
 
   <!-- PAYMENT MODAL -->
-  <div id="paymentModal" class="modal-backdrop hidden fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-[#0e1628] rounded-2xl border border-slate-200 dark:border-slate-700 w-full max-w-md p-5 shadow-2xl">
-      <h3 class="text-base font-bold mb-3 text-slate-900 dark:text-white" id="paymentModalTitle">Record Financial Voucher</h3>
+  <div id="paymentModal" class="modal-backdrop hidden fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-[#0e1628] rounded-card border border-slate-700 w-full max-w-md p-5 shadow-2xl">
+      <h3 class="text-base font-bold font-display mb-3 text-white" id="paymentModalTitle">Record Financial Voucher</h3>
       <form onsubmit="handlePaymentSubmit(event)" class="space-y-3 text-xs">
         <input type="hidden" id="editPaymentId">
         <div class="grid grid-cols-2 gap-2.5">
           <div>
-            <label class="block text-slate-500 mb-1">Transaction Date</label>
-            <input type="date" id="payDate" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-medium" required>
+            <label class="block text-slate-400 mb-1">Transaction Date</label>
+            <input type="date" id="payDate" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-medium text-white" required>
           </div>
           <div>
-            <label class="block text-slate-500 mb-1">Voucher Number</label>
-            <input id="payVoucher" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-mono" required>
+            <label class="block text-slate-400 mb-1">Voucher Number</label>
+            <input id="payVoucher" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-mono text-white" required>
           </div>
         </div>
         <div>
-          <label class="block text-slate-500 mb-1">Payee / Entity / Contract</label>
-          <input id="payEntity" placeholder="e.g. Renuka (505), Balaji Traders" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-medium" required>
+          <label class="block text-slate-400 mb-1">Payee / Entity / Contract</label>
+          <input id="payEntity" placeholder="e.g. Unit 505 (Sharma), Balaji Traders" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-medium text-white" required>
         </div>
         <div class="grid grid-cols-2 gap-2.5">
           <div>
-            <label class="block text-slate-500 mb-1">Amount (₹)</label>
-            <input type="number" step="0.01" id="payAmount" placeholder="0.00" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-bold font-number" required>
+            <label class="block text-slate-400 mb-1">Amount (₹)</label>
+            <input type="number" step="0.01" id="payAmount" placeholder="0.00" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-mono font-bold text-white" required>
           </div>
           <div>
-            <label class="block text-slate-500 mb-1">Category</label>
-            <select id="payCategory" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-medium">
+            <label class="block text-slate-400 mb-1">Category</label>
+            <select id="payCategory" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-medium text-white">
               <option value="Booking Advance">Booking Advance</option>
               <option value="Contractor Advance">Contractor Advance</option>
               <option value="Maintenance Milestone">Maintenance Milestone</option>
@@ -523,8 +593,8 @@
         </div>
         <div class="grid grid-cols-2 gap-2.5">
           <div>
-            <label class="block text-slate-500 mb-1">Payment Mode</label>
-            <select id="payMode" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-medium">
+            <label class="block text-slate-400 mb-1">Payment Mode</label>
+            <select id="payMode" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-medium text-white">
               <option value="NEFT / RTGS">NEFT / RTGS</option>
               <option value="UPI">UPI</option>
               <option value="Cheque">Cheque</option>
@@ -532,156 +602,156 @@
             </select>
           </div>
           <div>
-            <label class="block text-slate-500 mb-1">Reference / UTR / Remarks</label>
-            <input id="payRemarks" placeholder="UTR or reference..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-medium">
+            <label class="block text-slate-400 mb-1">Reference / UTR / Remarks</label>
+            <input id="payRemarks" placeholder="UTR or cheque number..." class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-medium text-white">
           </div>
         </div>
         <div class="flex justify-end gap-2 pt-2">
-          <button type="button" onclick="closeModal('paymentModal')" class="px-4 py-2 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 font-semibold">Cancel</button>
-          <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-white px-5 py-2 rounded-xl font-bold transition">Save Voucher</button>
+          <button type="button" onclick="closeModal('paymentModal')" class="px-4 py-2 text-slate-400 hover:text-white font-semibold">Cancel</button>
+          <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-black font-display px-5 py-2 rounded-lg font-bold transition">Save Voucher</button>
         </div>
       </form>
     </div>
   </div>
 
   <!-- LABOUR MODAL -->
-  <div id="labourModal" class="modal-backdrop hidden fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-[#0e1628] rounded-2xl border border-slate-200 dark:border-slate-700 w-full max-w-md p-5 shadow-2xl">
-      <h3 class="text-base font-bold mb-3 text-slate-900 dark:text-white" id="labourModalTitle">Log Labour Record</h3>
+  <div id="labourModal" class="modal-backdrop hidden fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-[#0e1628] rounded-card border border-slate-700 w-full max-w-md p-5 shadow-2xl">
+      <h3 class="text-base font-bold font-display mb-3 text-white" id="labourModalTitle">Log Labour Record</h3>
       <form onsubmit="handleLabourSubmit(event)" class="space-y-3 text-xs">
         <input type="hidden" id="editLabourId">
         <div class="grid grid-cols-2 gap-2.5">
           <div>
-            <label class="block text-slate-500 mb-1">Date</label>
-            <input type="date" id="labourDate" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-medium" required>
+            <label class="block text-slate-400 mb-1">Date</label>
+            <input type="date" id="labourDate" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-medium text-white" required>
           </div>
           <div>
-            <label class="block text-slate-500 mb-1">Amount / Wage (₹)</label>
-            <input type="number" step="0.01" id="labourAmount" placeholder="0.00" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-bold font-number" required>
+            <label class="block text-slate-400 mb-1">Wage / Amount (₹)</label>
+            <input type="number" step="0.01" id="labourAmount" placeholder="0.00" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-mono font-bold text-white" required>
           </div>
         </div>
         <div>
-          <label class="block text-slate-500 mb-1">Person / Contractor Name</label>
-          <input id="labourPerson" placeholder="e.g. Srinu Tiles, Mason Crew A" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-medium" required>
+          <label class="block text-slate-400 mb-1">Person / Contractor Name</label>
+          <input id="labourPerson" placeholder="e.g. Srinu Tile Guild" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-medium text-white" required>
         </div>
         <div>
-          <label class="block text-slate-500 mb-1">Purpose / Work Description</label>
-          <input id="labourPurpose" placeholder="e.g. 5th floor tile work" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-medium" required>
+          <label class="block text-slate-400 mb-1">Purpose / Work Description</label>
+          <input id="labourPurpose" placeholder="e.g. 5th floor tile work" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-medium text-white" required>
         </div>
         <div>
-          <label class="block text-slate-500 mb-1">Remarks</label>
-          <input id="labourRemarks" placeholder="Headcount or extra details..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-medium">
+          <label class="block text-slate-400 mb-1">Remarks</label>
+          <input id="labourRemarks" placeholder="Headcount or muster notes..." class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-medium text-white">
         </div>
         <div class="flex justify-end gap-2 pt-2">
-          <button type="button" onclick="closeModal('labourModal')" class="px-4 py-2 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 font-semibold">Cancel</button>
-          <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-white px-5 py-2 rounded-xl font-bold transition">Save Entry</button>
+          <button type="button" onclick="closeModal('labourModal')" class="px-4 py-2 text-slate-400 hover:text-white font-semibold">Cancel</button>
+          <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-black font-display px-5 py-2 rounded-lg font-bold transition">Save Entry</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- MATERIALS MODAL (INCLUDES QUANTITY FIELD) -->
-  <div id="materialsModal" class="modal-backdrop hidden fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-[#0e1628] rounded-2xl border border-slate-200 dark:border-slate-700 w-full max-w-md p-5 shadow-2xl">
-      <h3 class="text-base font-bold mb-3 text-slate-900 dark:text-white" id="materialsModalTitle">Log Material Record</h3>
+  <!-- MATERIALS MODAL (WITH QUANTITY) -->
+  <div id="materialsModal" class="modal-backdrop hidden fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-[#0e1628] rounded-card border border-slate-700 w-full max-w-md p-5 shadow-2xl">
+      <h3 class="text-base font-bold font-display mb-3 text-white" id="materialsModalTitle">Log Material Record</h3>
       <form onsubmit="handleMaterialsSubmit(event)" class="space-y-3 text-xs">
         <input type="hidden" id="editMaterialId">
         
         <div class="grid grid-cols-2 gap-2.5">
           <div>
-            <label class="block text-slate-500 mb-1">Date</label>
-            <input type="date" id="matDate" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-medium" required>
+            <label class="block text-slate-400 mb-1">Date</label>
+            <input type="date" id="matDate" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-medium text-white" required>
           </div>
           <div>
-            <label class="block text-slate-500 mb-1">Quantity</label>
-            <input type="text" id="matQuantity" placeholder="e.g. 500 Bags, 2.5 Tons" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-medium" required>
+            <label class="block text-slate-400 mb-1">Quantity</label>
+            <input type="text" id="matQuantity" placeholder="e.g. 500 Bags, 2.5 Tons" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-medium text-white" required>
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-2.5">
           <div>
-            <label class="block text-slate-500 mb-1">Material Name</label>
-            <input id="matName" placeholder="e.g. UltraTech Cement" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-medium" required>
+            <label class="block text-slate-400 mb-1">Material Name</label>
+            <input id="matName" placeholder="e.g. UltraTech Cement" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-medium text-white" required>
           </div>
           <div>
-            <label class="block text-slate-500 mb-1">Total Bill / Amount (₹)</label>
-            <input type="number" step="0.01" id="matAmount" placeholder="0.00" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-bold font-number" required>
+            <label class="block text-slate-400 mb-1">Total Bill / Amount (₹)</label>
+            <input type="number" step="0.01" id="matAmount" placeholder="0.00" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-mono font-bold text-white" required>
           </div>
         </div>
 
         <div>
-          <label class="block text-slate-500 mb-1">Supplier / Vendor</label>
-          <input id="matSupplier" placeholder="e.g. Sri Balaji Traders" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-medium" required>
+          <label class="block text-slate-400 mb-1">Supplier / Vendor</label>
+          <input id="matSupplier" placeholder="e.g. Sri Balaji Building Suppliers" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-medium text-white" required>
         </div>
 
         <div>
-          <label class="block text-slate-500 mb-1">Purpose / Placement Area</label>
-          <input id="matPurpose" placeholder="e.g. Block B slab casting" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-medium" required>
+          <label class="block text-slate-400 mb-1">Placement / Purpose</label>
+          <input id="matPurpose" placeholder="e.g. Block B slab casting" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-medium text-white" required>
         </div>
 
         <div>
-          <label class="block text-slate-500 mb-1">Remarks</label>
-          <input id="matRemarks" placeholder="Invoice #, challan, or vehicle number..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-medium">
+          <label class="block text-slate-400 mb-1">Remarks</label>
+          <input id="matRemarks" placeholder="Invoice #, challan, vehicle number..." class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-medium text-white">
         </div>
 
         <div class="flex justify-end gap-2 pt-2">
-          <button type="button" onclick="closeModal('materialsModal')" class="px-4 py-2 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 font-semibold">Cancel</button>
-          <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-white px-5 py-2 rounded-xl font-bold transition">Save Entry</button>
+          <button type="button" onclick="closeModal('materialsModal')" class="px-4 py-2 text-slate-400 hover:text-white font-semibold">Cancel</button>
+          <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-black font-display px-5 py-2 rounded-lg font-bold transition">Save Entry</button>
         </div>
       </form>
     </div>
   </div>
 
   <!-- OTHER EXPENSES MODAL -->
-  <div id="expenseModal" class="modal-backdrop hidden fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-[#0e1628] rounded-2xl border border-slate-200 dark:border-slate-700 w-full max-w-md p-5 shadow-2xl">
-      <h3 class="text-base font-bold mb-3 text-slate-900 dark:text-white" id="expenseModalTitle">Log Other Expense</h3>
+  <div id="expenseModal" class="modal-backdrop hidden fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-[#0e1628] rounded-card border border-slate-700 w-full max-w-md p-5 shadow-2xl">
+      <h3 class="text-base font-bold font-display mb-3 text-white" id="expenseModalTitle">Log Other Expense</h3>
       <form onsubmit="handleExpenseSubmit(event)" class="space-y-3 text-xs">
         <input type="hidden" id="editExpenseId">
         <div class="grid grid-cols-2 gap-2.5">
           <div>
-            <label class="block text-slate-500 mb-1">Date</label>
-            <input type="date" id="expenseDate" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-medium" required>
+            <label class="block text-slate-400 mb-1">Date</label>
+            <input type="date" id="expenseDate" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-medium text-white" required>
           </div>
           <div>
-            <label class="block text-slate-500 mb-1">Amount (₹)</label>
-            <input type="number" step="0.01" id="expenseAmount" placeholder="0.00" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-bold font-number" required>
+            <label class="block text-slate-400 mb-1">Amount (₹)</label>
+            <input type="number" step="0.01" id="expenseAmount" placeholder="0.00" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-mono font-bold text-white" required>
           </div>
         </div>
         <div>
-          <label class="block text-slate-500 mb-1">Expense Name / Payee</label>
-          <input id="expenseName" placeholder="e.g. Generator Diesel, Municipal Fee" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-medium" required>
+          <label class="block text-slate-400 mb-1">Expense Item / Payee</label>
+          <input id="expenseName" placeholder="e.g. Generator Diesel, Municipal Permit" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-medium text-white" required>
         </div>
         <div>
-          <label class="block text-slate-500 mb-1">Purpose / Remarks</label>
-          <input id="expensePurpose" placeholder="e.g. 50L diesel for backup generator" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-medium" required>
+          <label class="block text-slate-400 mb-1">Purpose / Remarks</label>
+          <input id="expensePurpose" placeholder="e.g. Backup power during concrete pour" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-medium text-white" required>
         </div>
         <div class="flex justify-end gap-2 pt-2">
-          <button type="button" onclick="closeModal('expenseModal')" class="px-4 py-2 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 font-semibold">Cancel</button>
-          <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-white px-5 py-2 rounded-xl font-bold transition">Save Expense</button>
+          <button type="button" onclick="closeModal('expenseModal')" class="px-4 py-2 text-slate-400 hover:text-white font-semibold">Cancel</button>
+          <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-black font-display px-5 py-2 rounded-lg font-bold transition">Save Expense</button>
         </div>
       </form>
     </div>
   </div>
 
   <!-- SNAG MODAL -->
-  <div id="snagModal" class="modal-backdrop hidden fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-[#0e1628] rounded-2xl border border-slate-200 dark:border-slate-700 w-full max-w-md p-5 shadow-2xl">
-      <h3 class="text-base font-bold mb-3 text-slate-900 dark:text-white" id="snagModalTitle">New Quality Snag / Task</h3>
+  <div id="snagModal" class="modal-backdrop hidden fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-[#0e1628] rounded-card border border-slate-700 w-full max-w-md p-5 shadow-2xl">
+      <h3 class="text-base font-bold font-display mb-3 text-white" id="snagModalTitle">New Quality Snag / Task</h3>
       <form onsubmit="handleSnagSubmit(event)" class="space-y-3 text-xs">
         <input type="hidden" id="editSnagId">
         <div>
-          <label class="block text-slate-500 mb-1">Task / Snag Description</label>
-          <input id="snagTitle" placeholder="e.g. Balcony waterproofing inspection Unit 505" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-medium" required>
+          <label class="block text-slate-400 mb-1">Task / Snag Description</label>
+          <input id="snagTitle" placeholder="e.g. Balcony waterproofing inspection Unit 505" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-medium text-white" required>
         </div>
         <div class="grid grid-cols-2 gap-2.5">
           <div>
-            <label class="block text-slate-500 mb-1">Assigned Lead / Team</label>
-            <input id="snagAssigned" placeholder="e.g. Ramesh Lead" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-medium">
+            <label class="block text-slate-400 mb-1">Assigned Lead / Team</label>
+            <input id="snagAssigned" placeholder="e.g. Ramesh Lead" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-medium text-white">
           </div>
           <div>
-            <label class="block text-slate-500 mb-1">Priority</label>
-            <select id="snagPriority" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-medium">
+            <label class="block text-slate-400 mb-1">Priority</label>
+            <select id="snagPriority" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-medium text-white">
               <option value="High">High</option>
               <option value="Medium" selected>Medium</option>
               <option value="Low">Low</option>
@@ -689,20 +759,20 @@
           </div>
         </div>
         <div>
-          <label class="block text-slate-500 mb-1">Target Completion Date</label>
-          <input type="date" id="snagDueDate" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 font-medium">
+          <label class="block text-slate-400 mb-1">Target Completion Date</label>
+          <input type="date" id="snagDueDate" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 font-medium text-white">
         </div>
         <div class="flex justify-end gap-2 pt-2">
-          <button type="button" onclick="closeModal('snagModal')" class="px-4 py-2 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 font-semibold">Cancel</button>
-          <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-white px-5 py-2 rounded-xl font-bold transition">Save Snag</button>
+          <button type="button" onclick="closeModal('snagModal')" class="px-4 py-2 text-slate-400 hover:text-white font-semibold">Cancel</button>
+          <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-black font-display px-5 py-2 rounded-lg font-bold transition">Save Snag</button>
         </div>
       </form>
     </div>
   </div>
 
   <!-- FLOATING TOAST NOTIFICATION -->
-  <div id="toastNotification" class="fixed bottom-6 right-6 z-50 transform translate-y-10 opacity-0 pointer-events-none transition-all duration-300 ease-out">
-    <div class="flex items-center gap-2.5 bg-emerald-600 dark:bg-emerald-700 text-white px-4 py-2 rounded-xl shadow-xl border border-emerald-500/50 font-semibold text-xs tracking-wide">
+  <div id="toastNotification" class="fixed bottom-5 right-5 z-50 transform translate-y-10 opacity-0 pointer-events-none transition-all duration-300 ease-out">
+    <div class="flex items-center gap-2.5 bg-emerald-600 text-white px-4 py-2 rounded-card shadow-xl border border-emerald-500/50 font-semibold text-xs tracking-wide">
       <span class="text-sm font-bold">✓</span>
       <span id="toastMessage">Successfully added!</span>
     </div>

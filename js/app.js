@@ -1,12 +1,12 @@
 /**
  * Sri Harshitha Constructions Log Report - Application Controller
- * Live Two-Way Sync with Google Apps Script, Offline-First Engine & Full Audit Capabilities
+ * Live Two-Way Cloud Sync with Google Apps Script & Clean Offline State
  */
 
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRw42iwcsYINjZhcxutFKWB1CcPZELYyc9QZyZ_cNsj7nt9FEBDDxD_qGPfVJ-Rbpu/exec";
-const STORAGE_KEY = 'shc_log_report_v7';
+const STORAGE_KEY = 'shc_prod_clean_db_v1';
 
-// State Container
+// Clean State Initialized Empty (No dummy mock records)
 let state = {
   todos: [],
   flats: [],
@@ -23,7 +23,7 @@ let currentSearchTerm = '';
 let currentChoicesList = [];
 
 // ==========================================
-// 1. INITIALIZATION & STORAGE
+// 1. INITIALIZATION & CLEAN ENGINE
 // ==========================================
 
 function initApp() {
@@ -38,7 +38,7 @@ function initApp() {
   // Cloud sync
   fetchMasterFromGoogleSheets();
 
-  // Close menus when clicking outside
+  // Close menus on outside click
   document.addEventListener('click', (e) => {
     const menu = document.getElementById('dataActionsMenu');
     const btn = document.getElementById('dataActionsBtn');
@@ -70,52 +70,27 @@ function loadLocalState() {
     try {
       state = JSON.parse(cached);
       if (!state.todos) state.todos = [];
+      if (!state.flats) state.flats = [];
+      if (!state.payments) state.payments = [];
+      if (!state.labour) state.labour = [];
+      if (!state.materials) state.materials = [];
       if (!state.expenses) state.expenses = [];
+      if (!state.snags) state.snags = [];
       return;
     } catch (err) {
-      console.warn("Local storage cache reset:", err);
+      console.warn("Cleared corrupt local cache, starting fresh", err);
     }
   }
 
-  // Pre-seeded Client Data
+  // Pure Clean Slate
   state = {
-    todos: [
-      { id: 1, text: "Verify 5th floor balcony waterproofing before tile laying", priority: "High", completed: false, created_at: "2026-10-04" },
-      { id: 2, text: "Collect final balance voucher for Unit 505 (Renuka)", priority: "High", completed: false, created_at: "2026-10-04" },
-      { id: 3, text: "Coordinate TMT steel rebar delivery with Balaji Traders", priority: "Medium", completed: true, created_at: "2026-10-03" }
-    ],
-    flats: [
-      {
-        id: 1,
-        unit_no: "505",
-        owner_name: "Renuka",
-        contact: "No phone recorded",
-        status: "Interior Fit-Out Phase",
-        choices: ["Teak Wood Doors", "Italian Marble Flooring", "Kohler Matte Black Fittings"],
-        history: "Handover inspection milestone scheduled for Q4 2026"
-      }
-    ],
-    payments: [
-      { id: 1, date: "2026-10-02", voucher_id: "SHC-PAY-0101", entity: "Renuka (505)", amount: 10000, category: "Booking Advance", payment_mode: "NEFT / RTGS", remarks: "Advance for marble choices" },
-      { id: 2, date: "2026-10-03", voucher_id: "SHC-PAY-0102", entity: "General Payee", amount: 100, category: "Booking Advance", payment_mode: "UPI", remarks: "Site utility cash reimbursement" }
-    ],
-    labour: [
-      { id: 1, date: "2026-10-02", person: "Srinu Tiles", purpose: "5th floor tile laying work", amount: 0, remarks: "Attendance recorded, wage pending" },
-      { id: 2, date: "2026-10-03", person: "Tiles", purpose: "Plastering finishing", amount: 0, remarks: "Site inspection done" },
-      { id: 3, date: "2026-10-04", person: "Tioes", purpose: "Corridor tiling", amount: 10000, remarks: "Advance paid to mason guild" }
-    ],
-    materials: [
-      { id: 1, date: "2026-10-02", name: "UltraTech Cement", quantity: "500 Bags", supplier: "Balaji Building Suppliers", purpose: "Slab casting", amount: 195000, remarks: "Invoice #BAL-991" },
-      { id: 2, date: "2026-10-03", name: "Tata Tiscon TMT 12mm", quantity: "2.8 Tons", supplier: "Vizag Steel Hub", purpose: "Column reinforcement", amount: 154850, remarks: "Invoice #VS-8821" }
-    ],
-    expenses: [
-      { id: 1, date: "2026-10-03", name: "Site Diesel", amount: 4800, purpose: "50L diesel for backup generator" },
-      { id: 2, date: "2026-10-04", name: "GVMC Site Water Tanker", amount: 1200, purpose: "Curing work water supply" }
-    ],
-    snags: [
-      { id: 1, title: "Balcony waterproofing sign-off Unit 505", assigned_to: "Ramesh Lead", priority: "High", due_date: "2026-10-05", status: "Pending" },
-      { id: 2, title: "Electrical switchboard alignment shaft B", assigned_to: "Suresh Electrician", priority: "Medium", due_date: "2026-10-06", status: "Pending" }
-    ]
+    todos: [],
+    flats: [],
+    payments: [],
+    labour: [],
+    materials: [],
+    expenses: [],
+    snags: []
   };
   saveState();
 }
@@ -172,10 +147,10 @@ async function fetchMasterFromGoogleSheets() {
 
     saveState();
     renderAll();
-    updateSyncStatus("SHEETS LIVE", "emerald");
+    updateSyncStatus("LIVE", "emerald");
   } catch (err) {
-    console.warn("Using offline storage:", err);
-    updateSyncStatus("OFFLINE READY", "slate");
+    console.warn("Offline fallback ready:", err);
+    updateSyncStatus("OFFLINE", "slate");
   }
 }
 
@@ -186,7 +161,7 @@ function pushRowToSheet(sheetName, rowArray) {
     mode: "no-cors",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ sheetName: sheetName, row: rowArray })
-  }).catch(e => console.error("Sheet push failed:", e));
+  }).catch(e => console.error("Sheet push error:", e));
 }
 
 function updateSyncStatus(text, color) {
@@ -195,15 +170,15 @@ function updateSyncStatus(text, color) {
   if (!pill || !txt) return;
 
   txt.innerText = text;
-  pill.className = `flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide ${
-    color === 'emerald' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20' :
-    color === 'amber' ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20' :
-    'bg-slate-200 dark:bg-slate-800 text-slate-500 border border-slate-300 dark:border-slate-700'
+  pill.className = `hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide ${
+    color === 'emerald' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+    color === 'amber' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
+    'bg-slate-800 text-slate-400 border border-slate-700'
   }`;
 }
 
 // ==========================================
-// 3. TOAST NOTIFICATION HELPER
+// 3. TOAST HELPER
 // ==========================================
 
 let toastTimer = null;
@@ -225,7 +200,7 @@ function showToast(message = "Successfully added!") {
 }
 
 // ==========================================
-// 4. ENTER-TO-SAVE KEYBOARD LOGIC
+// 4. ENTER-TO-SAVE INTERCEPTORS
 // ==========================================
 
 function initModalEnterKeyBindings() {
@@ -266,6 +241,7 @@ function renderAll() {
   renderExpenses();
   renderSnags();
   updateBadgeCounts();
+  renderSparkline();
 }
 
 function renderKPIs() {
@@ -285,17 +261,28 @@ function renderKPIs() {
   const badgeEl = document.getElementById('statBalanceBadge');
   balEl.innerText = `${netBalance < 0 ? '-₹ ' : '₹ '}${Math.abs(netBalance).toLocaleString('en-IN')}`;
 
-  if (netBalance >= 0) {
-    balEl.className = 'metric-num text-xl lg:text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-1.5';
-    badgeEl.innerText = 'SURPLUS';
-    badgeEl.className = 'px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-emerald-500/10 text-emerald-500';
+  if (netBalance > 0) {
+    badgeEl.innerText = 'SURPLUS LIQUIDITY';
+    badgeEl.className = 'text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
+  } else if (netBalance < 0) {
+    badgeEl.innerText = 'DEFICIT (OVERDRAWN)';
+    badgeEl.className = 'text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20';
   } else {
-    balEl.className = 'metric-num text-xl lg:text-2xl font-extrabold text-rose-600 dark:text-rose-400 mt-1.5';
-    badgeEl.innerText = 'DEFICIT';
-    badgeEl.className = 'px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-rose-500/10 text-rose-500';
+    badgeEl.innerText = 'NET BALANCED';
+    badgeEl.className = 'text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400';
   }
 
   document.getElementById('statPendingTodos').innerText = pendingTodos;
+  document.getElementById('statTotalFlats').innerText = state.flats.length;
+
+  const openSnags = state.snags.filter(s => s.status !== 'Completed').length;
+  document.getElementById('statOpenSnagsCount').innerText = `${openSnags} pending snags`;
+
+  const pendingList = state.todos.filter(t => !t.completed);
+  const snippetEl = document.getElementById('statRecentTodoSnippet');
+  if (snippetEl) {
+    snippetEl.innerText = pendingList.length ? pendingList[0].text : 'All tasks cleared';
+  }
 }
 
 function updateBadgeCounts() {
@@ -305,7 +292,69 @@ function updateBadgeCounts() {
   document.getElementById('badge-labour').innerText = state.labour.length;
   document.getElementById('badge-materials').innerText = state.materials.length;
   document.getElementById('badge-expenses').innerText = (state.expenses || []).length;
-  document.getElementById('badge-snags').innerText = state.snags.filter(s => s.status === 'Pending').length;
+  document.getElementById('badge-snags').innerText = state.snags.filter(s => s.status !== 'Completed').length;
+}
+
+// ------------------------------------------
+// DYNAMIC SPARKLINE VISUAL & EMPTY STATE
+// ------------------------------------------
+
+function renderSparkline() {
+  const svg = document.getElementById('sparklineSvg');
+  const emptyState = document.getElementById('chartEmptyState');
+  const loadingState = document.getElementById('chartLoadingState');
+
+  if (loadingState) loadingState.classList.add('hidden');
+
+  // Build time series from payments and debit logs
+  let transactions = [
+    ...state.payments.map(p => ({ date: p.date, val: Number(p.amount) || 0, type: 'credit' })),
+    ...state.labour.map(l => ({ date: l.date, val: -(Number(l.amount) || 0), type: 'debit' })),
+    ...state.materials.map(m => ({ date: m.date, val: -(Number(m.amount) || 0), type: 'debit' })),
+    ...(state.expenses || []).map(x => ({ date: x.date, val: -(Number(x.amount) || 0), type: 'debit' }))
+  ].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  if (transactions.length === 0) {
+    if (emptyState) emptyState.classList.remove('hidden');
+    if (svg) svg.innerHTML = '';
+    return;
+  }
+
+  if (emptyState) emptyState.classList.add('hidden');
+
+  // Compute rolling cumulative balance points
+  let balance = 0;
+  let points = [{ x: 0, y: 0 }];
+  transactions.forEach((t, i) => {
+    balance += t.val;
+    points.push({ x: i + 1, y: balance });
+  });
+
+  const minY = Math.min(...points.map(p => p.y));
+  const maxY = Math.max(...points.map(p => p.y));
+  const rangeY = (maxY - minY) || 1;
+  const width = svg.clientWidth || 300;
+  const height = svg.clientHeight || 70;
+
+  const coords = points.map((p, idx) => {
+    const x = (idx / (points.length - 1)) * (width - 16) + 8;
+    const y = height - 10 - (((p.y - minY) / rangeY) * (height - 24));
+    return `${x},${y}`;
+  });
+
+  const pathD = `M ${coords.join(' L ')}`;
+  const areaD = `M ${coords[0]} L ${coords.join(' L ')} L ${width - 8},${height} L 8,${height} Z`;
+
+  svg.innerHTML = `
+    <defs>
+      <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#F59E0B" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <path d="${areaD}" fill="url(#areaGradient)" />
+    <path d="${pathD}" fill="none" stroke="#F59E0B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+  `;
 }
 
 // ------------------------------------------
@@ -325,30 +374,30 @@ function renderTodos() {
   }
 
   if (list.length === 0) {
-    container.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs">No tasks found.</div>`;
+    container.innerHTML = `<div class="p-8 text-center text-slate-500 text-xs">No active checklist items. Add one above!</div>`;
     return;
   }
 
   container.innerHTML = list.map(t => `
-    <div id="item-todo-${t.id}" class="p-3.5 flex items-center justify-between gap-3 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition">
+    <div id="item-todo-${t.id}" class="p-3.5 flex items-center justify-between gap-3 hover:bg-slate-800/40 transition">
       <div class="flex items-center gap-3 flex-grow">
         <input 
           type="checkbox" 
           ${t.completed ? 'checked' : ''} 
           onchange="toggleTodoItem(${t.id})" 
-          class="h-4 w-4 rounded text-amber-500 focus:ring-amber-400 border-slate-300 dark:border-slate-700 cursor-pointer"
+          class="h-4 w-4 rounded text-amber-500 focus:ring-amber-400 border-slate-700 cursor-pointer"
         >
-        <span class="text-xs font-medium ${t.completed ? 'line-through text-slate-400 dark:text-slate-500' : 'text-slate-800 dark:text-slate-200'}">
+        <span class="text-xs font-medium ${t.completed ? 'line-through text-slate-500' : 'text-slate-200'}">
           ${t.text}
         </span>
       </div>
       <div class="flex items-center gap-2 flex-shrink-0">
         <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${
-          t.priority === 'High' ? 'bg-rose-500/10 text-rose-500 border border-rose-500/20' :
-          t.priority === 'Medium' ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20' :
-          'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'
+          t.priority === 'High' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' :
+          t.priority === 'Medium' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
+          'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
         }">${t.priority}</span>
-        <button type="button" onclick="deleteTodoItem(${t.id})" class="text-slate-400 hover:text-rose-500 text-xs px-1">✕</button>
+        <button type="button" onclick="deleteTodoItem(${t.id})" class="text-slate-500 hover:text-rose-400 text-xs px-1">✕</button>
       </div>
     </div>
   `).join('');
@@ -403,9 +452,9 @@ function setTodoFilter(mode) {
   ['All', 'Pending', 'Completed'].forEach(m => {
     const btn = document.getElementById(`todoFilter${m}`);
     if (m.toLowerCase() === mode) {
-      btn.className = "px-3 py-1 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs";
+      btn.className = "px-2.5 py-1 rounded bg-slate-800 text-white";
     } else {
-      btn.className = "px-3 py-1 rounded-lg text-slate-500 hover:text-slate-900 dark:hover:text-white";
+      btn.className = "px-2.5 py-1 rounded text-slate-400 hover:text-white";
     }
   });
   renderTodos();
@@ -429,39 +478,39 @@ function renderFlats() {
   }
 
   if (list.length === 0) {
-    grid.innerHTML = `<div class="col-span-3 p-8 text-center text-slate-400 text-xs">No registered units found.</div>`;
+    grid.innerHTML = `<div class="col-span-3 p-8 text-center text-slate-500 text-xs">No registered flats yet. Click '+ Register Unit' to add one.</div>`;
     return;
   }
 
   grid.innerHTML = list.map(f => `
-    <div id="item-flat-${f.id}" class="bg-white dark:bg-[#0c1424] border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-xs relative">
+    <div id="item-flat-${f.id}" class="bg-[#0e1628] border border-slate-800 rounded-card p-4 shadow-sm relative">
       <div class="flex justify-between items-start mb-2">
         <div>
-          <span class="text-xs font-black font-number text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-500/20">${f.unit_no}</span>
-          <h3 class="text-sm font-bold text-slate-900 dark:text-white mt-1.5">${f.owner_name}</h3>
-          <p class="text-[11px] text-slate-400">${f.contact || 'No phone'}</p>
+          <span class="text-xs font-black font-display text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-500/20">${f.unit_no}</span>
+          <h3 class="text-sm font-bold font-display text-white mt-1.5">${f.owner_name}</h3>
+          <p class="text-[11px] text-slate-400">${f.contact || 'No phone recorded'}</p>
         </div>
-        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">${f.status || 'Active'}</span>
+        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">${f.status || 'Active'}</span>
       </div>
 
       <div class="mt-3">
-        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Custom Specs:</span>
+        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">Custom Specs:</span>
         <div class="flex flex-wrap gap-1">
           ${(f.choices && f.choices.length > 0) ? f.choices.map(c => `
-            <span class="text-[11px] font-medium bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 px-2 py-0.5 rounded-lg flex items-center gap-1">
+            <span class="text-[11px] font-medium bg-slate-900 text-slate-300 border border-slate-700 px-2 py-0.5 rounded-lg flex items-center gap-1">
               <span class="text-amber-500">•</span> ${c}
             </span>
-          `).join('') : '<span class="text-[11px] text-slate-400 italic">Standard specifications</span>'}
+          `).join('') : '<span class="text-[11px] text-slate-500 italic">Standard builder specifications</span>'}
         </div>
       </div>
 
-      <div class="mt-3 pt-2 border-t border-slate-100 dark:border-slate-800/80 text-[11px] text-slate-500 dark:text-slate-400">
+      <div class="mt-3 pt-2 border-t border-slate-800 text-[11px] text-slate-400">
         ${f.history || 'No milestones logged'}
       </div>
 
       <div class="no-print mt-3 flex justify-end gap-2.5">
-        <button type="button" onclick="editFlat(${f.id})" class="text-slate-500 hover:text-amber-500 text-xs font-semibold">Edit</button>
-        <button type="button" onclick="deleteFlat(${f.id})" class="text-slate-400 hover:text-rose-500 text-xs font-semibold">Delete</button>
+        <button type="button" onclick="editFlat(${f.id})" class="text-slate-400 hover:text-amber-400 text-xs font-semibold">Edit</button>
+        <button type="button" onclick="deleteFlat(${f.id})" class="text-slate-500 hover:text-rose-400 text-xs font-semibold">Delete</button>
       </div>
     </div>
   `).join('');
@@ -526,13 +575,13 @@ function deleteFlat(id) {
 function renderChoiceTags() {
   const container = document.getElementById('choiceTagsList');
   if (currentChoicesList.length === 0) {
-    container.innerHTML = '<span class="text-slate-400 italic text-[11px]">No specific bullet choices added.</span>';
+    container.innerHTML = '<span class="text-slate-500 italic text-[11px]">No specific bullet choices added.</span>';
     return;
   }
   container.innerHTML = currentChoicesList.map((tag, idx) => `
-    <span class="inline-flex items-center gap-1 bg-amber-500/10 text-amber-500 border border-amber-500/20 px-2 py-0.5 rounded-md text-[11px] font-medium">
+    <span class="inline-flex items-center gap-1 bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-md text-[11px] font-medium">
       ${tag}
-      <button type="button" onclick="removeChoiceTag(${idx})" class="hover:text-rose-500 text-xs">✕</button>
+      <button type="button" onclick="removeChoiceTag(${idx})" class="hover:text-rose-400 text-xs">✕</button>
     </span>
   `).join('');
 }
@@ -578,22 +627,22 @@ function renderPayments() {
   }
 
   if (list.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-slate-400 text-xs">No payment records found.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-slate-500 text-xs">No vouchers logged yet.</td></tr>`;
     return;
   }
 
   tbody.innerHTML = list.map(p => `
-    <tr id="item-payment-${p.id}" class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition">
-      <td class="p-3.5 text-slate-500 font-mono">${p.date}</td>
-      <td class="p-3.5 font-bold font-mono text-amber-500">${p.voucher_id}</td>
-      <td class="p-3.5 font-semibold text-slate-900 dark:text-white">${p.entity}</td>
-      <td class="p-3.5"><span class="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-[10px] font-semibold">${p.category}</span></td>
-      <td class="p-3.5 text-slate-500">${p.payment_mode}</td>
-      <td class="p-3.5 font-bold font-number text-emerald-600 dark:text-emerald-400">₹ ${Number(p.amount).toLocaleString('en-IN')}</td>
-      <td class="p-3.5 text-slate-500 max-w-xs truncate">${p.remarks || '-'}</td>
-      <td class="p-3.5 text-right no-print">
-        <button type="button" onclick="editPayment(${p.id})" class="text-slate-400 hover:text-amber-500 mr-2">Edit</button>
-        <button type="button" onclick="deletePayment(${p.id})" class="text-slate-400 hover:text-rose-500">Delete</button>
+    <tr id="item-payment-${p.id}" class="hover:bg-slate-800/40 transition">
+      <td class="p-3 text-slate-400 font-mono">${p.date}</td>
+      <td class="p-3 font-bold font-mono text-amber-400">${p.voucher_id}</td>
+      <td class="p-3 font-semibold text-white">${p.entity}</td>
+      <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-slate-800 text-[10px] font-semibold text-slate-300">${p.category}</span></td>
+      <td class="p-3 text-slate-400">${p.payment_mode}</td>
+      <td class="p-3 font-bold font-mono text-emerald-400">₹ ${Number(p.amount).toLocaleString('en-IN')}</td>
+      <td class="p-3 text-slate-400 max-w-xs truncate">${p.remarks || '-'}</td>
+      <td class="p-3 text-right no-print">
+        <button type="button" onclick="editPayment(${p.id})" class="text-slate-400 hover:text-amber-400 mr-2">Edit</button>
+        <button type="button" onclick="deletePayment(${p.id})" class="text-slate-500 hover:text-rose-400">Delete</button>
       </td>
     </tr>
   `).join('');
@@ -677,20 +726,20 @@ function renderLabour() {
   }
 
   if (list.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400 text-xs">No daily labour entries match.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-500 text-xs">No daily labour entries match.</td></tr>`;
     return;
   }
 
   tbody.innerHTML = list.map(l => `
-    <tr id="item-labour-${l.id}" class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition">
-      <td class="p-3.5 text-slate-500 font-mono">${l.date}</td>
-      <td class="p-3.5 font-bold text-slate-900 dark:text-white">${l.person}</td>
-      <td class="p-3.5 text-slate-600 dark:text-slate-300">${l.purpose}</td>
-      <td class="p-3.5 font-bold font-number text-rose-600 dark:text-rose-400">₹ ${Number(l.amount).toLocaleString('en-IN')}</td>
-      <td class="p-3.5 text-slate-500">${l.remarks || '-'}</td>
-      <td class="p-3.5 text-right no-print">
-        <button type="button" onclick="editLabour(${l.id})" class="text-slate-400 hover:text-amber-500 mr-2">Edit</button>
-        <button type="button" onclick="deleteLabour(${l.id})" class="text-slate-400 hover:text-rose-500">Delete</button>
+    <tr id="item-labour-${l.id}" class="hover:bg-slate-800/40 transition">
+      <td class="p-3 text-slate-400 font-mono">${l.date}</td>
+      <td class="p-3 font-bold text-white">${l.person}</td>
+      <td class="p-3 text-slate-300">${l.purpose}</td>
+      <td class="p-3 font-bold font-mono text-rose-400">₹ ${Number(l.amount).toLocaleString('en-IN')}</td>
+      <td class="p-3 text-slate-400">${l.remarks || '-'}</td>
+      <td class="p-3 text-right no-print">
+        <button type="button" onclick="editLabour(${l.id})" class="text-slate-400 hover:text-amber-400 mr-2">Edit</button>
+        <button type="button" onclick="deleteLabour(${l.id})" class="text-slate-500 hover:text-rose-400">Delete</button>
       </td>
     </tr>
   `).join('');
@@ -772,22 +821,22 @@ function renderMaterials() {
   }
 
   if (list.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-slate-400 text-xs">No daily material invoices match.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-slate-500 text-xs">No daily material invoices logged yet.</td></tr>`;
     return;
   }
 
   tbody.innerHTML = list.map(m => `
-    <tr id="item-material-${m.id}" class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition">
-      <td class="p-3.5 text-slate-500 font-mono">${m.date}</td>
-      <td class="p-3.5 font-bold text-slate-900 dark:text-white">${m.name}</td>
-      <td class="p-3.5 font-bold font-mono text-amber-600 dark:text-amber-400">${m.quantity || '-'}</td>
-      <td class="p-3.5 text-slate-500">${m.supplier}</td>
-      <td class="p-3.5 text-slate-600 dark:text-slate-300">${m.purpose}</td>
-      <td class="p-3.5 font-bold font-number text-rose-600 dark:text-rose-400">₹ ${Number(m.amount).toLocaleString('en-IN')}</td>
-      <td class="p-3.5 text-slate-500">${m.remarks || '-'}</td>
-      <td class="p-3.5 text-right no-print">
-        <button type="button" onclick="editMaterial(${m.id})" class="text-slate-400 hover:text-amber-500 mr-2">Edit</button>
-        <button type="button" onclick="deleteMaterial(${m.id})" class="text-slate-400 hover:text-rose-500">Delete</button>
+    <tr id="item-material-${m.id}" class="hover:bg-slate-800/40 transition">
+      <td class="p-3 text-slate-400 font-mono">${m.date}</td>
+      <td class="p-3 font-bold text-white">${m.name}</td>
+      <td class="p-3 font-bold font-mono text-amber-400">${m.quantity || '-'}</td>
+      <td class="p-3 text-slate-400">${m.supplier}</td>
+      <td class="p-3 text-slate-300">${m.purpose}</td>
+      <td class="p-3 font-bold font-mono text-rose-400">₹ ${Number(m.amount).toLocaleString('en-IN')}</td>
+      <td class="p-3 text-slate-400">${m.remarks || '-'}</td>
+      <td class="p-3 text-right no-print">
+        <button type="button" onclick="editMaterial(${m.id})" class="text-slate-400 hover:text-amber-400 mr-2">Edit</button>
+        <button type="button" onclick="deleteMaterial(${m.id})" class="text-slate-500 hover:text-rose-400">Delete</button>
       </td>
     </tr>
   `).join('');
@@ -870,19 +919,19 @@ function renderExpenses() {
   }
 
   if (list.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-slate-400 text-xs">No other expenses found.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-slate-500 text-xs">No extra expenses recorded.</td></tr>`;
     return;
   }
 
   tbody.innerHTML = list.map(x => `
-    <tr id="item-expense-${x.id}" class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition">
-      <td class="p-3.5 text-slate-500 font-mono">${x.date}</td>
-      <td class="p-3.5 font-bold text-slate-900 dark:text-white">${x.name}</td>
-      <td class="p-3.5 font-bold font-number text-rose-600 dark:text-rose-400">₹ ${Number(x.amount).toLocaleString('en-IN')}</td>
-      <td class="p-3.5 text-slate-600 dark:text-slate-300">${x.purpose || '-'}</td>
-      <td class="p-3.5 text-right no-print">
-        <button type="button" onclick="editExpense(${x.id})" class="text-slate-400 hover:text-amber-500 mr-2">Edit</button>
-        <button type="button" onclick="deleteExpense(${x.id})" class="text-slate-400 hover:text-rose-500">Delete</button>
+    <tr id="item-expense-${x.id}" class="hover:bg-slate-800/40 transition">
+      <td class="p-3 text-slate-400 font-mono">${x.date}</td>
+      <td class="p-3 font-bold text-white">${x.name}</td>
+      <td class="p-3 font-bold font-mono text-rose-400">₹ ${Number(x.amount).toLocaleString('en-IN')}</td>
+      <td class="p-3 text-slate-300">${x.purpose || '-'}</td>
+      <td class="p-3 text-right no-print">
+        <button type="button" onclick="editExpense(${x.id})" class="text-slate-400 hover:text-amber-400 mr-2">Edit</button>
+        <button type="button" onclick="deleteExpense(${x.id})" class="text-slate-500 hover:text-rose-400">Delete</button>
       </td>
     </tr>
   `).join('');
@@ -960,32 +1009,32 @@ function renderSnags() {
   }
 
   if (list.length === 0) {
-    container.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs">No snag items found.</div>`;
+    container.innerHTML = `<div class="p-8 text-center text-slate-500 text-xs">No snags flagged. All civil sections certified.</div>`;
     return;
   }
 
   container.innerHTML = list.map(s => `
-    <div id="item-snag-${s.id}" class="p-3.5 flex items-center justify-between gap-3 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition">
+    <div id="item-snag-${s.id}" class="p-3.5 flex items-center justify-between gap-3 hover:bg-slate-800/40 transition">
       <div class="flex items-center gap-3">
         <input 
           type="checkbox" 
           ${s.status === 'Completed' ? 'checked' : ''} 
           onchange="toggleSnagStatus(${s.id})" 
-          class="h-4 w-4 rounded text-amber-500 focus:ring-amber-400 border-slate-300 dark:border-slate-700 cursor-pointer"
+          class="h-4 w-4 rounded text-amber-500 focus:ring-amber-400 border-slate-700 cursor-pointer"
         >
         <div>
-          <span class="text-xs font-semibold ${s.status === 'Completed' ? 'line-through text-slate-400' : 'text-slate-900 dark:text-white'}">
+          <span class="text-xs font-semibold ${s.status === 'Completed' ? 'line-through text-slate-500' : 'text-white'}">
             ${s.title}
           </span>
-          <p class="text-[11px] text-slate-400 mt-0.5">Assigned: ${s.assigned_to || 'Unassigned'} • Due: ${s.due_date || 'No date'}</p>
+          <p class="text-[11px] text-slate-400 mt-0.5">Lead: ${s.assigned_to || 'Unassigned'} • Due: ${s.due_date || 'No target date'}</p>
         </div>
       </div>
       <div class="flex items-center gap-2">
         <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${
-          s.priority === 'High' ? 'bg-rose-500/10 text-rose-500 border border-rose-500/20' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
+          s.priority === 'High' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' : 'bg-slate-800 text-slate-300'
         }">${s.priority}</span>
-        <button type="button" onclick="editSnag(${s.id})" class="text-slate-400 hover:text-amber-500 text-xs px-1">Edit</button>
-        <button type="button" onclick="deleteSnag(${s.id})" class="text-slate-400 hover:text-rose-500 text-xs px-1">✕</button>
+        <button type="button" onclick="editSnag(${s.id})" class="text-slate-400 hover:text-amber-400 text-xs px-1">Edit</button>
+        <button type="button" onclick="deleteSnag(${s.id})" class="text-slate-500 hover:text-rose-400 text-xs px-1">✕</button>
       </div>
     </div>
   `).join('');
@@ -1167,7 +1216,7 @@ function showRecommendations(query) {
   });
 
   if (matches.length === 0) {
-    box.innerHTML = `<div class="p-3 text-center text-slate-400 text-xs">No direct matches for "${query}"</div>`;
+    box.innerHTML = `<div class="p-3 text-center text-slate-500 text-xs">No direct matches for "${query}"</div>`;
     box.classList.remove('hidden');
     return;
   }
@@ -1175,16 +1224,16 @@ function showRecommendations(query) {
   box.innerHTML = matches.slice(0, 6).map(m => `
     <div 
       onmousedown="redirectToMatch('${m.tab}', '${m.targetId}')"
-      class="p-2.5 flex items-center justify-between hover:bg-amber-500/10 dark:hover:bg-amber-500/15 cursor-pointer transition text-xs"
+      class="p-2.5 flex items-center justify-between hover:bg-slate-800 cursor-pointer transition text-xs"
     >
       <div class="flex items-center gap-2.5 truncate">
         <span class="text-sm flex-shrink-0">${m.icon}</span>
         <div class="truncate">
-          <div class="font-bold text-slate-900 dark:text-white truncate">${highlightText(m.title, query)}</div>
+          <div class="font-bold text-white truncate">${highlightText(m.title, query)}</div>
           <div class="text-[10px] text-slate-400 truncate">${highlightText(m.subtitle, query)}</div>
         </div>
       </div>
-      <span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 tracking-wider ml-2 flex-shrink-0">${m.tag}</span>
+      <span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 tracking-wider ml-2 flex-shrink-0">${m.tag}</span>
     </div>
   `).join('');
 
@@ -1208,7 +1257,7 @@ function redirectToMatch(tabName, targetElementId) {
 function highlightText(text, query) {
   if (!query) return text;
   const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-  return text.replace(regex, '<mark class="bg-amber-500/30 text-amber-500 font-bold px-0.5 rounded">$1</mark>');
+  return text.replace(regex, '<mark class="bg-amber-500/30 text-amber-300 font-bold px-0.5 rounded">$1</mark>');
 }
 
 function clearSearch() {
@@ -1245,14 +1294,14 @@ function switchTab(tab) {
   currentTab = tab;
   document.querySelectorAll('.tab-view').forEach(v => v.classList.add('hidden'));
   document.querySelectorAll('.tab-button').forEach(b => {
-    b.className = "tab-button flex items-center gap-2 px-3.5 py-2 rounded-xl whitespace-nowrap text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition";
+    b.className = "tab-button flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap text-slate-400 hover:text-white transition";
   });
 
   const activeView = document.getElementById(`view-${tab}`);
   const activeBtn = document.getElementById(`tab-${tab}`);
   if (activeView) activeView.classList.remove('hidden');
   if (activeBtn) {
-    activeBtn.className = "tab-button flex items-center gap-2 px-3.5 py-2 rounded-xl whitespace-nowrap bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs font-bold";
+    activeBtn.className = "tab-button flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap bg-slate-800 text-white shadow-xs font-bold transition";
   }
 }
 
@@ -1316,7 +1365,7 @@ function downloadSampleTemplate() {
   XLSX.utils.book_append_sheet(wb, wsMaterials, "Daily_Materials");
   XLSX.utils.book_append_sheet(wb, wsExpenses, "Other_Expenses");
 
-  XLSX.writeFile(wb, "Sri_Harshitha_Constructions_Monthly_Template.xlsx");
+  XLSX.writeFile(wb, "Sri_Harshitha_Constructions_Template.xlsx");
 }
 
 function handleExcelUpload(e) {
@@ -1428,7 +1477,7 @@ function exportAuditWorkbook() {
   XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(state.expenses || []), "Other_Expenses");
   XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(state.snags), "Snags_Register");
 
-  XLSX.writeFile(wb, `SHC_Audit_Workbook_${new Date().toISOString().slice(0, 10)}.xlsx`);
+  XLSX.writeFile(wb, `SHC_Site_Ledger_${new Date().toISOString().slice(0, 10)}.xlsx`);
   showToast("Audit workbook downloaded!");
 }
 

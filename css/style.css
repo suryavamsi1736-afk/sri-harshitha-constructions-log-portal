@@ -1,53 +1,52 @@
-/* Custom Fonts and Tabular Numbers */
-.metric-num {
-  font-family: 'Outfit', 'Inter', sans-serif;
-  font-feature-settings: 'tnum' 1, 'ss01' 1;
-  letter-spacing: -0.025em;
+/* Human-First Typography & Precise Metrics */
+body {
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
 }
 
-/* SHC Brand Logo: Bold Black Letters on Warm Yellowish-Orangish Radiant Gradient */
+/* SHC Brand Logo: Bold Black Letters on Warm Radiant Accent Gradient */
 .shc-brand-logo {
   background: linear-gradient(135deg, #FFC700 0%, #FF9900 50%, #FF5A00 100%);
   position: relative;
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .shc-brand-logo::after {
   content: '';
   position: absolute;
   inset: 1px;
-  border-radius: 0.65rem;
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
   pointer-events: none;
 }
 
-/* Card Elevations */
-.kpi-card {
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+/* Tabular Mono Alignment */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
 }
 
-.kpi-card:hover {
-  transform: translateY(-1.5px);
+/* Responsive Table Horizontal Scrolling */
+.table-scroll-container {
+  -webkit-overflow-scrolling: touch;
 }
 
-/* Smooth Tab Transitions */
+/* Soft Transition Controls */
 .tab-button {
-  transition: all 0.15s ease-in-out;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Search Redirection Target Pulse Glow */
+/* Search Focus Glow */
 .search-target-highlight {
   animation: searchGlow 2.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes searchGlow {
   0% {
-    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
-    background-color: rgba(245, 158, 11, 0.12);
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.8);
+    background-color: rgba(245, 158, 11, 0.14);
   }
   50% {
     box-shadow: 0 0 0 8px rgba(245, 158, 11, 0);
-    background-color: rgba(245, 158, 11, 0.06);
+    background-color: rgba(245, 158, 11, 0.05);
   }
   100% {
     box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
@@ -78,7 +77,6 @@
     print-color-adjust: exact !important;
   }
 
-  /* Hide interactive screen UI */
   .no-print,
   header,
   nav,
@@ -89,36 +87,21 @@
   #toastNotification,
   button,
   form,
-  .kpi-card .absolute {
+  #chartContainer,
+  #chartActiveNote {
     display: none !important;
   }
 
-  /* Show dedicated audit header and verification blocks */
   .print-only {
     display: block !important;
   }
 
-  /* Reveal all tables and views sequentially for audit record */
   .tab-view {
     display: block !important;
     page-break-inside: auto;
     margin-bottom: 1.5rem !important;
   }
 
-  /* Formal KPI Summary Grid */
-  .kpi-card {
-    border: 1px solid #cbd5e1 !important;
-    background: #f8fafc !important;
-    box-shadow: none !important;
-    padding: 8px 12px !important;
-    border-radius: 6px !important;
-  }
-
-  .metric-num {
-    font-size: 16px !important;
-  }
-
-  /* Clean Audit Table Typography */
   table {
     width: 100% !important;
     border-collapse: collapse !important;
@@ -169,7 +152,6 @@
     margin-bottom: 6px !important;
   }
 
-  /* Audit Sign-off signatures */
   .audit-signatures {
     page-break-inside: avoid;
     margin-top: 28px;
