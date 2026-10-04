@@ -1,12 +1,12 @@
 /**
  * Sri Harshitha Constructions Log Report - Application Controller
- * Live Two-Way Cloud Sync with Google Apps Script & Clean Offline State
+ * Live Two-Way Cloud Sync with Google Apps Script, Fault-Tolerant Search & Smooth Redirection
  */
 
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRw42iwcsYINjZhcxutFKWB1CcPZELYyc9QZyZ_cNsj7nt9FEBDDxD_qGPfVJ-Rbpu/exec";
-const STORAGE_KEY = 'shc_prod_clean_db_v2';
+const STORAGE_KEY = 'shc_prod_clean_db_v3';
 
-// Clean State Initialized Empty (No dummy mock records)
+// Clean State Initialized Empty
 let state = {
   todos: [],
   flats: [],
@@ -38,7 +38,7 @@ function initApp() {
   // Cloud sync
   fetchMasterFromGoogleSheets();
 
-  // Close menus on outside click
+  // Close dropdowns on outside click
   document.addEventListener('click', (e) => {
     const menu = document.getElementById('dataActionsMenu');
     const btn = document.getElementById('dataActionsBtn');
@@ -88,7 +88,6 @@ function loadLocalState() {
     }
   }
 
-  // Pure Clean Slate
   state = {
     todos: [],
     flats: [],
@@ -369,6 +368,12 @@ function renderSparkline() {
   `;
 }
 
+// Safe string helper to prevent undefined / number toLowerCase exceptions
+function safeStr(val) {
+  if (val === null || val === undefined) return '';
+  return String(val).toLowerCase();
+}
+
 // ------------------------------------------
 // TAB: TO-DO CHECKLIST
 // ------------------------------------------
@@ -382,7 +387,7 @@ function renderTodos() {
 
   if (currentSearchTerm) {
     const q = currentSearchTerm.toLowerCase();
-    list = list.filter(t => t.text.toLowerCase().includes(q));
+    list = list.filter(t => safeStr(t.text).includes(q));
   }
 
   if (list.length === 0) {
@@ -483,9 +488,9 @@ function renderFlats() {
   if (currentSearchTerm) {
     const q = currentSearchTerm.toLowerCase();
     list = list.filter(f => 
-      f.unit_no.toLowerCase().includes(q) ||
-      f.owner_name.toLowerCase().includes(q) ||
-      (f.choices && f.choices.some(c => c.toLowerCase().includes(q)))
+      safeStr(f.unit_no).includes(q) ||
+      safeStr(f.owner_name).includes(q) ||
+      (f.choices && f.choices.some(c => safeStr(c).includes(q)))
     );
   }
 
@@ -631,10 +636,10 @@ function renderPayments() {
   if (currentSearchTerm) {
     const q = currentSearchTerm.toLowerCase();
     list = list.filter(p => 
-      p.voucher_id.toLowerCase().includes(q) ||
-      p.entity.toLowerCase().includes(q) ||
-      p.remarks.toLowerCase().includes(q) ||
-      p.amount.toString().includes(q)
+      safeStr(p.voucher_id).includes(q) ||
+      safeStr(p.entity).includes(q) ||
+      safeStr(p.remarks).includes(q) ||
+      safeStr(p.amount).includes(q)
     );
   }
 
@@ -730,10 +735,10 @@ function renderLabour() {
   if (currentSearchTerm) {
     const q = currentSearchTerm.toLowerCase();
     list = list.filter(l => 
-      l.person.toLowerCase().includes(q) ||
-      l.purpose.toLowerCase().includes(q) ||
-      l.remarks.toLowerCase().includes(q) ||
-      l.amount.toString().includes(q)
+      safeStr(l.person).includes(q) ||
+      safeStr(l.purpose).includes(q) ||
+      safeStr(l.remarks).includes(q) ||
+      safeStr(l.amount).includes(q)
     );
   }
 
@@ -823,12 +828,12 @@ function renderMaterials() {
   if (currentSearchTerm) {
     const q = currentSearchTerm.toLowerCase();
     list = list.filter(m => 
-      m.name.toLowerCase().includes(q) ||
-      (m.quantity && m.quantity.toLowerCase().includes(q)) ||
-      m.supplier.toLowerCase().includes(q) ||
-      m.purpose.toLowerCase().includes(q) ||
-      m.remarks.toLowerCase().includes(q) ||
-      m.amount.toString().includes(q)
+      safeStr(m.name).includes(q) ||
+      safeStr(m.quantity).includes(q) ||
+      safeStr(m.supplier).includes(q) ||
+      safeStr(m.purpose).includes(q) ||
+      safeStr(m.remarks).includes(q) ||
+      safeStr(m.amount).includes(q)
     );
   }
 
@@ -924,9 +929,9 @@ function renderExpenses() {
   if (currentSearchTerm) {
     const q = currentSearchTerm.toLowerCase();
     list = list.filter(x => 
-      x.name.toLowerCase().includes(q) ||
-      (x.purpose && x.purpose.toLowerCase().includes(q)) ||
-      x.amount.toString().includes(q)
+      safeStr(x.name).includes(q) ||
+      safeStr(x.purpose).includes(q) ||
+      safeStr(x.amount).includes(q)
     );
   }
 
@@ -1015,8 +1020,8 @@ function renderSnags() {
   if (currentSearchTerm) {
     const q = currentSearchTerm.toLowerCase();
     list = list.filter(s => 
-      s.title.toLowerCase().includes(q) ||
-      s.assigned_to.toLowerCase().includes(q)
+      safeStr(s.title).includes(q) ||
+      safeStr(s.assigned_to).includes(q)
     );
   }
 
@@ -1115,12 +1120,13 @@ function deleteSnag(id) {
 }
 
 // ==========================================
-// 6. PREDICTIVE SEARCH
+// 6. ROBUST PREDICTIVE SEARCH & REDIRECTION
 // ==========================================
 
 function initSearch() {
   const input = document.getElementById('globalSearchInput');
   const box = document.getElementById('searchRecommendationsBox');
+  if (!input || !box) return;
 
   input.addEventListener('input', () => {
     const term = input.value.trim();
@@ -1138,23 +1144,43 @@ function initSearch() {
   });
 
   input.addEventListener('focus', () => {
-    if (input.value.trim().length > 0) {
-      showRecommendations(input.value.trim());
+    const term = input.value.trim();
+    if (term.length > 0) {
+      showRecommendations(term);
+    }
+  });
+
+  // Delegated click listener to safely handle search result clicks
+  box.addEventListener('click', (e) => {
+    const item = e.target.closest('.search-result-row');
+    if (item) {
+      const tabName = item.getAttribute('data-tab');
+      const targetId = item.getAttribute('data-target');
+      if (tabName && targetId) {
+        redirectToMatch(tabName, targetId);
+      }
     }
   });
 }
 
 function showRecommendations(query) {
   const box = document.getElementById('searchRecommendationsBox');
+  if (!box) return;
   const q = query.toLowerCase();
   let matches = [];
 
-  state.flats.forEach(f => {
-    if (f.unit_no.toLowerCase().includes(q) || f.owner_name.toLowerCase().includes(q) || (f.choices && f.choices.some(c => c.toLowerCase().includes(q)))) {
+  // 1. Flats search
+  (state.flats || []).forEach(f => {
+    if (
+      safeStr(f.unit_no).includes(q) || 
+      safeStr(f.owner_name).includes(q) || 
+      safeStr(f.contact).includes(q) || 
+      (f.choices && f.choices.some(c => safeStr(c).includes(q)))
+    ) {
       matches.push({
         tab: 'flats',
         targetId: `item-flat-${f.id}`,
-        title: `Unit ${f.unit_no} - ${f.owner_name}`,
+        title: `Unit ${f.unit_no || ''} - ${f.owner_name || 'Allottee'}`,
         subtitle: f.choices && f.choices.length ? f.choices.join(', ') : 'Standard specs',
         icon: '🏢',
         tag: 'UNIT'
@@ -1162,65 +1188,91 @@ function showRecommendations(query) {
     }
   });
 
-  state.payments.forEach(p => {
-    if (p.voucher_id.toLowerCase().includes(q) || p.entity.toLowerCase().includes(q) || p.remarks.toLowerCase().includes(q) || p.amount.toString().includes(q)) {
+  // 2. Payments search
+  (state.payments || []).forEach(p => {
+    if (
+      safeStr(p.voucher_id).includes(q) || 
+      safeStr(p.entity).includes(q) || 
+      safeStr(p.remarks).includes(q) || 
+      safeStr(p.amount).includes(q)
+    ) {
       matches.push({
         tab: 'payments',
         targetId: `item-payment-${p.id}`,
-        title: `${p.voucher_id}: ${p.entity}`,
-        subtitle: `₹ ${Number(p.amount).toLocaleString('en-IN')} • ${p.category}`,
+        title: `${p.voucher_id || 'Voucher'}: ${p.entity || ''}`,
+        subtitle: `₹ ${Number(p.amount || 0).toLocaleString('en-IN')} • ${p.category || 'Payment'}`,
         icon: '💳',
         tag: 'PAYMENT'
       });
     }
   });
 
-  state.labour.forEach(l => {
-    if (l.person.toLowerCase().includes(q) || l.purpose.toLowerCase().includes(q) || l.remarks.toLowerCase().includes(q)) {
+  // 3. Labour search
+  (state.labour || []).forEach(l => {
+    if (
+      safeStr(l.person).includes(q) || 
+      safeStr(l.purpose).includes(q) || 
+      safeStr(l.remarks).includes(q) || 
+      safeStr(l.amount).includes(q)
+    ) {
       matches.push({
         tab: 'labour',
         targetId: `item-labour-${l.id}`,
-        title: `${l.person} (Labour)`,
-        subtitle: `${l.purpose} • ₹ ${Number(l.amount).toLocaleString('en-IN')}`,
+        title: `${l.person || 'Labour'} (Labour Log)`,
+        subtitle: `${l.purpose || ''} • ₹ ${Number(l.amount || 0).toLocaleString('en-IN')}`,
         icon: '👷',
         tag: 'LABOUR'
       });
     }
   });
 
-  state.materials.forEach(m => {
-    if (m.name.toLowerCase().includes(q) || (m.quantity && m.quantity.toLowerCase().includes(q)) || m.supplier.toLowerCase().includes(q) || m.purpose.toLowerCase().includes(q) || m.amount.toString().includes(q)) {
+  // 4. Materials search
+  (state.materials || []).forEach(m => {
+    if (
+      safeStr(m.name).includes(q) || 
+      safeStr(m.quantity).includes(q) || 
+      safeStr(m.supplier).includes(q) || 
+      safeStr(m.purpose).includes(q) || 
+      safeStr(m.remarks).includes(q) || 
+      safeStr(m.amount).includes(q)
+    ) {
       matches.push({
         tab: 'materials',
         targetId: `item-material-${m.id}`,
-        title: `${m.name} [${m.quantity || '1 Unit'}] (${m.supplier})`,
-        subtitle: `${m.purpose} • ₹ ${Number(m.amount).toLocaleString('en-IN')}`,
+        title: `${m.name || 'Material'} [${m.quantity || '1 Unit'}]`,
+        subtitle: `${m.supplier || ''} • ${m.purpose || ''} • ₹ ${Number(m.amount || 0).toLocaleString('en-IN')}`,
         icon: '🧱',
         tag: 'MATERIAL'
       });
     }
   });
 
+  // 5. Other Expenses search
   (state.expenses || []).forEach(x => {
-    if (x.name.toLowerCase().includes(q) || (x.purpose && x.purpose.toLowerCase().includes(q)) || x.amount.toString().includes(q)) {
+    if (
+      safeStr(x.name).includes(q) || 
+      safeStr(x.purpose).includes(q) || 
+      safeStr(x.amount).includes(q)
+    ) {
       matches.push({
         tab: 'expenses',
         targetId: `item-expense-${x.id}`,
-        title: `${x.name} (Expense)`,
-        subtitle: `${x.purpose || ''} • ₹ ${Number(x.amount).toLocaleString('en-IN')}`,
+        title: `${x.name || 'Expense'} (Site Expense)`,
+        subtitle: `${x.purpose || ''} • ₹ ${Number(x.amount || 0).toLocaleString('en-IN')}`,
         icon: '💸',
         tag: 'EXPENSE'
       });
     }
   });
 
-  state.todos.forEach(t => {
-    if (t.text.toLowerCase().includes(q)) {
+  // 6. To-Do tasks search
+  (state.todos || []).forEach(t => {
+    if (safeStr(t.text).includes(q)) {
       matches.push({
         tab: 'todos',
         targetId: `item-todo-${t.id}`,
-        title: t.text,
-        subtitle: `Priority: ${t.priority}`,
+        title: t.text || 'Task',
+        subtitle: `Priority: ${t.priority || 'Medium'} • Status: ${t.completed ? 'Done' : 'Active'}`,
         icon: '☑️',
         tag: 'TO-DO'
       });
@@ -1228,24 +1280,25 @@ function showRecommendations(query) {
   });
 
   if (matches.length === 0) {
-    box.innerHTML = `<div class="p-3 text-center text-slate-500 text-xs">No direct matches for "${query}"</div>`;
+    box.innerHTML = `<div class="p-3 text-center text-slate-400 text-xs">No direct records found for "${query}"</div>`;
     box.classList.remove('hidden');
     return;
   }
 
-  box.innerHTML = matches.slice(0, 6).map(m => `
+  box.innerHTML = matches.slice(0, 8).map(m => `
     <div 
-      onmousedown="redirectToMatch('${m.tab}', '${m.targetId}')"
-      class="p-2.5 flex items-center justify-between hover:bg-slate-800 cursor-pointer transition text-xs"
+      class="search-result-row p-2.5 flex items-center justify-between hover:bg-slate-800 cursor-pointer transition text-xs"
+      data-tab="${m.tab}"
+      data-target="${m.targetId}"
     >
-      <div class="flex items-center gap-2.5 truncate">
+      <div class="flex items-center gap-2.5 truncate pointer-events-none">
         <span class="text-sm flex-shrink-0">${m.icon}</span>
         <div class="truncate">
           <div class="font-bold text-white truncate">${highlightText(m.title, query)}</div>
           <div class="text-[10px] text-slate-400 truncate">${highlightText(m.subtitle, query)}</div>
         </div>
       </div>
-      <span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 tracking-wider ml-2 flex-shrink-0">${m.tag}</span>
+      <span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 tracking-wider ml-2 flex-shrink-0 pointer-events-none">${m.tag}</span>
     </div>
   `).join('');
 
@@ -1253,9 +1306,21 @@ function showRecommendations(query) {
 }
 
 function redirectToMatch(tabName, targetElementId) {
-  switchTab(tabName);
-  document.getElementById('searchRecommendationsBox').classList.add('hidden');
+  // 1. Clear search input and filter so the target record is rendered in the DOM
+  const searchInput = document.getElementById('globalSearchInput');
+  if (searchInput) searchInput.value = '';
+  currentSearchTerm = '';
+  toggleClearButton(false);
+  hideFilterBanner();
 
+  const box = document.getElementById('searchRecommendationsBox');
+  if (box) box.classList.add('hidden');
+
+  // 2. Switch tab and re-render so all elements are present
+  switchTab(tabName);
+  renderAll();
+
+  // 3. Locate target element, scroll to it, and trigger glow highlight
   setTimeout(() => {
     const el = document.getElementById(targetElementId);
     if (el) {
@@ -1263,26 +1328,33 @@ function redirectToMatch(tabName, targetElementId) {
       el.classList.add('search-target-highlight');
       setTimeout(() => el.classList.remove('search-target-highlight'), 2200);
     }
-  }, 120);
+  }, 100);
 }
 
 function highlightText(text, query) {
-  if (!query) return text;
-  const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-  return text.replace(regex, '<mark class="bg-amber-500/30 text-amber-300 font-bold px-0.5 rounded">$1</mark>');
+  if (!query || !text) return text || '';
+  try {
+    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    return String(text).replace(regex, '<mark class="bg-amber-500/30 text-amber-300 font-bold px-0.5 rounded">$1</mark>');
+  } catch (e) {
+    return text;
+  }
 }
 
 function clearSearch() {
-  document.getElementById('globalSearchInput').value = '';
+  const input = document.getElementById('globalSearchInput');
+  if (input) input.value = '';
   currentSearchTerm = '';
   toggleClearButton(false);
-  document.getElementById('searchRecommendationsBox').classList.add('hidden');
+  const box = document.getElementById('searchRecommendationsBox');
+  if (box) box.classList.add('hidden');
   hideFilterBanner();
   renderAll();
 }
 
 function toggleClearButton(show) {
   const btn = document.getElementById('clearSearchBtn');
+  if (!btn) return;
   if (show) btn.classList.remove('hidden');
   else btn.classList.add('hidden');
 }
@@ -1290,12 +1362,15 @@ function toggleClearButton(show) {
 function showFilterBanner(term) {
   const banner = document.getElementById('activeFilterPill');
   const termEl = document.getElementById('activeFilterTerm');
-  banner.classList.remove('hidden');
-  termEl.innerText = `"${term}"`;
+  if (banner && termEl) {
+    banner.classList.remove('hidden');
+    termEl.innerText = `"${term}"`;
+  }
 }
 
 function hideFilterBanner() {
-  document.getElementById('activeFilterPill').classList.add('hidden');
+  const banner = document.getElementById('activeFilterPill');
+  if (banner) banner.classList.add('hidden');
 }
 
 // ==========================================

@@ -5,15 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Sri Harshitha Constructions | Site Operations &amp; Ledger</title>
 
-  <!-- Favicon -->
+  <!-- SHC Favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='shcG' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23FFD000'/%3E%3Cstop offset='50%25' stop-color='%23FFA200'/%3E%3Cstop offset='100%25' stop-color='%23FF6200'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23shcG)'/%3E%3Crect x='3' y='3' width='58' height='58' rx='13' fill='none' stroke='%23000000' stroke-opacity='0.15' stroke-width='2'/%3E%3Ctext x='32' y='42' font-family='Plus Jakarta Sans, sans-serif' font-size='23' font-weight='900' letter-spacing='-1' fill='%23000000' text-anchor='middle'%3ESHC%3C/text%3E%3C/svg%3E">
 
-  <!-- Typography: Plus Jakarta Sans & Inter -->
+  <!-- Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap" rel="stylesheet">
 
-  <!-- Tailwind CSS & SheetJS -->
+  <!-- Tailwind CSS & SheetJS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -38,12 +38,12 @@
 <body class="bg-[#080d1a] dark:bg-[#070b16] text-slate-100 min-h-screen transition-colors duration-200 antialiased font-sans selection:bg-amber-500/30 selection:text-amber-200">
 
   <!-- ========================================== -->
-  <!-- CENTERED-SEARCH EXECUTIVE HEADER           -->
+  <!-- CENTERED-SEARCH EXECUTIVE HEADER (Z-50)    -->
   <!-- ========================================== -->
-  <header class="no-print sticky top-0 z-40 bg-[#0c1326]/95 backdrop-blur-md border-b border-slate-800/90 px-4 sm:px-6 py-2.5 transition-colors shadow-sm">
+  <header class="no-print sticky top-0 z-50 bg-[#0c1326]/95 backdrop-blur-md border-b border-slate-800/90 px-4 sm:px-6 py-2.5 transition-colors shadow-sm">
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 items-center gap-3">
       
-      <!-- Left: Brand Identity (Cols 1-4) -->
+      <!-- Left: Brand Identity -->
       <div class="md:col-span-4 flex items-center gap-3">
         <div class="shc-brand-logo flex-shrink-0 w-10 h-10 rounded-card flex items-center justify-center shadow-md">
           <span class="text-black font-extrabold font-display text-base tracking-tight select-none">SHC</span>
@@ -66,13 +66,13 @@
         </div>
       </div>
 
-      <!-- Center: Prominent Centered Search Bar (Cols 5-8) -->
+      <!-- Center: Centered Search Bar -->
       <div class="md:col-span-5 flex justify-center w-full">
         <div class="relative w-full max-w-md">
           <input 
             type="text" 
             id="globalSearchInput" 
-            placeholder="Search anything (e.g. 505, Cement, Sharma)..." 
+            placeholder="Search flats, vouchers, tasks..." 
             class="w-full bg-[#0a0f1d] text-white border border-slate-700/80 hover:border-slate-600 rounded-card pl-9 pr-14 py-2 text-xs font-medium focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/70 focus:outline-none transition placeholder:text-slate-500 shadow-inner"
             autocomplete="off"
           >
@@ -81,11 +81,12 @@
             <kbd class="hidden sm:inline-block px-1.5 py-0.5 text-[9px] font-semibold text-slate-400 bg-slate-800/80 border border-slate-700 rounded font-mono">⌘K</kbd>
             <button id="clearSearchBtn" onclick="clearSearch()" class="hidden text-slate-400 hover:text-white text-xs px-1">✕</button>
           </div>
-          <div id="searchRecommendationsBox" class="hidden absolute top-full mt-1.5 left-0 right-0 bg-[#0e1628] border border-slate-700 rounded-card shadow-2xl z-50 max-h-80 overflow-y-auto divide-y divide-slate-800"></div>
+          <!-- Recommendations Dropdown Container -->
+          <div id="searchRecommendationsBox" class="hidden absolute top-full mt-2 left-0 right-0 bg-[#0e172a] text-white border border-slate-700 rounded-card shadow-2xl z-[60] max-h-80 overflow-y-auto divide-y divide-slate-800"></div>
         </div>
       </div>
 
-      <!-- Right: Action Utilities (Cols 9-12) -->
+      <!-- Right: Action Utilities -->
       <div class="md:col-span-3 flex items-center justify-end gap-2">
         <button onclick="toggleTheme()" class="p-2 rounded-card border border-slate-800 text-slate-300 hover:bg-slate-800/80 transition" title="Toggle Mode">
           <span id="themeIcon">☀️</span>
@@ -128,7 +129,7 @@
   <!-- ========================================== -->
   <main class="max-w-7xl mx-auto px-3 sm:px-6 py-5">
 
-    <!-- PRINT-ONLY EXECUTIVE LETTERHEAD -->
+    <!-- PRINT-ONLY AUDIT LETTERHEAD -->
     <div class="print-only border-b-2 border-slate-900 pb-3 mb-4">
       <div class="flex justify-between items-start">
         <div class="flex items-center gap-3">
@@ -153,10 +154,8 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- VISUALLY STUNNING BOLD OVERVIEW CARDS      -->
+    <!-- INFLOW & OUTFLOW OVERVIEW CARDS            -->
     <!-- ========================================== -->
-    
-    <!-- Row 1: High-Impact Inflow & Outflow Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
       
       <!-- INFLOW CARD -->
@@ -210,7 +209,7 @@
 
     </div>
 
-    <!-- Row 2: Dominant Liquidity Card Flanked by Tasks & Flats -->
+    <!-- DOMINANT LIQUIDITY & SECONDARY WIDGETS -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
       
       <!-- Dominant Hero Liquidity Widget (Spans 2 columns) -->
@@ -228,7 +227,7 @@
           </button>
         </div>
 
-        <!-- Micro Trend Visual / Chart & Empty State -->
+        <!-- Micro Trend Visual / Chart Canvas -->
         <div class="mt-4 flex-grow flex flex-col justify-center">
           <div id="chartContainer" class="relative h-24 w-full flex items-end">
             <div id="chartLoadingState" class="absolute inset-0 flex items-center justify-center text-xs text-slate-500 animate-pulse">
@@ -247,7 +246,7 @@
         </div>
       </div>
 
-      <!-- Flanking Secondary Widgets (1 column) -->
+      <!-- Flanking Secondary Widgets -->
       <div class="grid grid-cols-2 lg:grid-cols-1 gap-4">
         
         <!-- Checklist Focus Widget -->
@@ -267,7 +266,7 @@
           </div>
         </div>
 
-        <!-- Quality Snags & Unit Count Widget -->
+        <!-- Registered Units Widget -->
         <div class="bg-[#0c1426] border border-slate-800 rounded-card p-4 shadow-sm flex flex-col justify-between">
           <div class="flex justify-between items-start">
             <div>
@@ -322,9 +321,7 @@
       </button>
     </div>
 
-    <!-- ========================================== -->
-    <!-- TAB 1: DAILY TO-DO LIST                   -->
-    <!-- ========================================== -->
+    <!-- TAB 1: DAILY TO-DO LIST -->
     <section id="view-todos" class="tab-view">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
         <div>
@@ -334,13 +331,12 @@
           <p class="text-xs text-slate-400 no-print">Fast site follow-ups, inspection items, and subcontractor tracking</p>
         </div>
         <div class="no-print inline-flex rounded-lg p-0.5 bg-slate-900 border border-slate-800 text-[11px] font-semibold self-start sm:self-auto">
-          <button type="button" onclick="setTodoFilter('all')" id="todoFilterAll" class="px-2.5 py-1 rounded bg-slate-800 text-white">All</button>
+          <button type="button" onclick="setTodoFilter('all')" id="todoFilterAll" class="px-2.5 py-1 rounded bg-slate-800 text-white font-bold">All</button>
           <button type="button" onclick="setTodoFilter('pending')" id="todoFilterPending" class="px-2.5 py-1 rounded text-slate-400 hover:text-white">Active</button>
           <button type="button" onclick="setTodoFilter('completed')" id="todoFilterCompleted" class="px-2.5 py-1 rounded text-slate-400 hover:text-white">Done</button>
         </div>
       </div>
 
-      <!-- Quick Add Task Bar -->
       <form onsubmit="handleQuickTodoSubmit(event)" class="no-print mb-4 flex flex-col sm:flex-row items-center gap-2 bg-[#0c1426] p-2 rounded-card border border-slate-800 shadow-sm">
         <input 
           type="text" 
@@ -366,9 +362,7 @@
       </div>
     </section>
 
-    <!-- ========================================== -->
-    <!-- TAB 2: UNIT DIRECTORY                     -->
-    <!-- ========================================== -->
+    <!-- TAB 2: UNIT DIRECTORY -->
     <section id="view-flats" class="tab-view hidden">
       <div class="flex justify-between items-center mb-3">
         <div>
@@ -382,9 +376,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5" id="flatsGrid"></div>
     </section>
 
-    <!-- ========================================== -->
-    <!-- TAB 3: FINANCIAL LEDGER                   -->
-    <!-- ========================================== -->
+    <!-- TAB 3: FINANCIAL LEDGER -->
     <section id="view-payments" class="tab-view hidden">
       <div class="flex justify-between items-center mb-3">
         <div>
@@ -414,9 +406,7 @@
       </div>
     </section>
 
-    <!-- ========================================== -->
-    <!-- TAB 4: DAILY LABOUR                       -->
-    <!-- ========================================== -->
+    <!-- TAB 4: DAILY LABOUR -->
     <section id="view-labour" class="tab-view hidden">
       <div class="flex justify-between items-center mb-3">
         <div>
@@ -444,9 +434,7 @@
       </div>
     </section>
 
-    <!-- ========================================== -->
-    <!-- TAB 5: DAILY MATERIALS (WITH QUANTITY)    -->
-    <!-- ========================================== -->
+    <!-- TAB 5: DAILY MATERIALS (WITH QUANTITY) -->
     <section id="view-materials" class="tab-view hidden">
       <div class="flex justify-between items-center mb-3">
         <div>
@@ -476,9 +464,7 @@
       </div>
     </section>
 
-    <!-- ========================================== -->
-    <!-- TAB 6: OTHER EXPENSES                     -->
-    <!-- ========================================== -->
+    <!-- TAB 6: OTHER EXPENSES -->
     <section id="view-expenses" class="tab-view hidden">
       <div class="flex justify-between items-center mb-3">
         <div>
@@ -505,9 +491,7 @@
       </div>
     </section>
 
-    <!-- ========================================== -->
-    <!-- TAB 7: SNAGS & TASKS                      -->
-    <!-- ========================================== -->
+    <!-- TAB 7: SNAGS & TASKS -->
     <section id="view-snags" class="tab-view hidden">
       <div class="flex justify-between items-center mb-3">
         <div>
@@ -548,11 +532,11 @@
   </main>
 
   <!-- ========================================== -->
-  <!-- MODAL DIALOGS                              -->
+  <!-- MODAL DIALOGS (Z-[100])                    -->
   <!-- ========================================== -->
 
   <!-- UNIT MODAL -->
-  <div id="flatModal" class="modal-backdrop hidden fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4">
+  <div id="flatModal" class="modal-backdrop hidden fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-[100] flex items-center justify-center p-3 sm:p-4">
     <div class="bg-[#0e1628] rounded-card border border-slate-700 w-full max-w-lg p-5 shadow-2xl">
       <h3 class="text-base font-bold font-display mb-3 text-white" id="flatModalTitle">Register / Edit Unit</h3>
       <form onsubmit="handleFlatSubmit(event)" class="space-y-3 text-xs">
@@ -609,7 +593,7 @@
   </div>
 
   <!-- PAYMENT MODAL -->
-  <div id="paymentModal" class="modal-backdrop hidden fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4">
+  <div id="paymentModal" class="modal-backdrop hidden fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-[100] flex items-center justify-center p-3 sm:p-4">
     <div class="bg-[#0e1628] rounded-card border border-slate-700 w-full max-w-md p-5 shadow-2xl">
       <h3 class="text-base font-bold font-display mb-3 text-white" id="paymentModalTitle">Record Financial Voucher</h3>
       <form onsubmit="handlePaymentSubmit(event)" class="space-y-3 text-xs">
@@ -668,7 +652,7 @@
   </div>
 
   <!-- LABOUR MODAL -->
-  <div id="labourModal" class="modal-backdrop hidden fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4">
+  <div id="labourModal" class="modal-backdrop hidden fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-[100] flex items-center justify-center p-3 sm:p-4">
     <div class="bg-[#0e1628] rounded-card border border-slate-700 w-full max-w-md p-5 shadow-2xl">
       <h3 class="text-base font-bold font-display mb-3 text-white" id="labourModalTitle">Log Labour Record</h3>
       <form onsubmit="handleLabourSubmit(event)" class="space-y-3 text-xs">
@@ -703,8 +687,8 @@
     </div>
   </div>
 
-  <!-- MATERIALS MODAL (WITH QUANTITY) -->
-  <div id="materialsModal" class="modal-backdrop hidden fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4">
+  <!-- MATERIALS MODAL -->
+  <div id="materialsModal" class="modal-backdrop hidden fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-[100] flex items-center justify-center p-3 sm:p-4">
     <div class="bg-[#0e1628] rounded-card border border-slate-700 w-full max-w-md p-5 shadow-2xl">
       <h3 class="text-base font-bold font-display mb-3 text-white" id="materialsModalTitle">Log Material Record</h3>
       <form onsubmit="handleMaterialsSubmit(event)" class="space-y-3 text-xs">
@@ -756,7 +740,7 @@
   </div>
 
   <!-- OTHER EXPENSES MODAL -->
-  <div id="expenseModal" class="modal-backdrop hidden fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4">
+  <div id="expenseModal" class="modal-backdrop hidden fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-[100] flex items-center justify-center p-3 sm:p-4">
     <div class="bg-[#0e1628] rounded-card border border-slate-700 w-full max-w-md p-5 shadow-2xl">
       <h3 class="text-base font-bold font-display mb-3 text-white" id="expenseModalTitle">Log Other Expense</h3>
       <form onsubmit="handleExpenseSubmit(event)" class="space-y-3 text-xs">
@@ -788,7 +772,7 @@
   </div>
 
   <!-- SNAG MODAL -->
-  <div id="snagModal" class="modal-backdrop hidden fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4">
+  <div id="snagModal" class="modal-backdrop hidden fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-[100] flex items-center justify-center p-3 sm:p-4">
     <div class="bg-[#0e1628] rounded-card border border-slate-700 w-full max-w-md p-5 shadow-2xl">
       <h3 class="text-base font-bold font-display mb-3 text-white" id="snagModalTitle">New Quality Snag / Task</h3>
       <form onsubmit="handleSnagSubmit(event)" class="space-y-3 text-xs">
@@ -824,7 +808,7 @@
   </div>
 
   <!-- FLOATING TOAST NOTIFICATION -->
-  <div id="toastNotification" class="fixed bottom-5 right-5 z-50 transform translate-y-10 opacity-0 pointer-events-none transition-all duration-300 ease-out">
+  <div id="toastNotification" class="fixed bottom-5 right-5 z-[110] transform translate-y-10 opacity-0 pointer-events-none transition-all duration-300 ease-out">
     <div class="flex items-center gap-2.5 bg-emerald-600 text-white px-4 py-2 rounded-card shadow-xl border border-emerald-500/50 font-semibold text-xs tracking-wide">
       <span class="text-sm font-bold">✓</span>
       <span id="toastMessage">Successfully added!</span>
