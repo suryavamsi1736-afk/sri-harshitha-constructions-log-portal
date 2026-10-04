@@ -1,10 +1,10 @@
 /**
  * Sri Harshitha Constructions Log Report - Application Controller
- * Live Two-Way Cloud Sync with Google Apps Script, Fault-Tolerant Search & Styled Action Buttons
+ * Live Two-Way Cloud Sync with Google Apps Script, Dual-Theme Support & Fault-Tolerant Search
  */
 
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRw42iwcsYINjZhcxutFKWB1CcPZELYyc9QZyZ_cNsj7nt9FEBDDxD_qGPfVJ-Rbpu/exec";
-const STORAGE_KEY = 'shc_prod_clean_db_v4';
+const STORAGE_KEY = 'shc_prod_clean_db_v5';
 
 // Clean State Initialized Empty
 let state = {
@@ -176,9 +176,9 @@ function updateSyncStatus(text, color) {
 
   txt.innerText = text;
   pill.className = `hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide ${
-    color === 'emerald' ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' :
-    color === 'amber' ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30' :
-    'bg-slate-800 text-slate-400 border border-slate-700'
+    color === 'emerald' ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30' :
+    color === 'amber' ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30' :
+    'bg-slate-200 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-300 dark:border-slate-700'
   }`;
 }
 
@@ -272,17 +272,17 @@ function renderKPIs() {
   balEl.innerText = `${netBalance < 0 ? '-₹ ' : '₹ '}${Math.abs(netBalance).toLocaleString('en-IN')}`;
 
   if (netBalance > 0) {
-    balEl.className = 'font-display text-2xl sm:text-3xl font-black text-emerald-400 tracking-tight font-mono';
+    balEl.className = 'font-display text-2xl sm:text-3xl font-black text-emerald-600 dark:text-emerald-400 tracking-tight font-mono';
     badgeEl.innerText = 'SURPLUS LIQUIDITY';
-    badgeEl.className = 'text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+    badgeEl.className = 'text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-500/15 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30';
   } else if (netBalance < 0) {
-    balEl.className = 'font-display text-2xl sm:text-3xl font-black text-rose-400 tracking-tight font-mono';
+    balEl.className = 'font-display text-2xl sm:text-3xl font-black text-rose-600 dark:text-rose-400 tracking-tight font-mono';
     badgeEl.innerText = 'DEFICIT (OVERDRAWN)';
-    badgeEl.className = 'text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30';
+    badgeEl.className = 'text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-rose-500/15 dark:bg-rose-500/20 text-rose-700 dark:text-rose-400 border border-rose-500/30';
   } else {
-    balEl.className = 'font-display text-2xl sm:text-3xl font-black text-white tracking-tight font-mono';
+    balEl.className = 'font-display text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight font-mono';
     badgeEl.innerText = 'NET BALANCED';
-    badgeEl.className = 'text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700';
+    badgeEl.className = 'text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700';
   }
 
   document.getElementById('statPendingTodos').innerText = pendingTodos;
@@ -396,25 +396,25 @@ function renderTodos() {
   }
 
   container.innerHTML = list.map(t => `
-    <div id="item-todo-${t.id}" class="p-3.5 flex items-center justify-between gap-3 hover:bg-slate-800/40 transition">
+    <div id="item-todo-${t.id}" class="p-3.5 flex items-center justify-between gap-3 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
       <div class="flex items-center gap-3 flex-grow">
         <input 
           type="checkbox" 
           ${t.completed ? 'checked' : ''} 
           onchange="toggleTodoItem(${t.id})" 
-          class="h-4 w-4 rounded text-amber-500 focus:ring-amber-400 border-slate-700 cursor-pointer"
+          class="h-4 w-4 rounded text-amber-500 focus:ring-amber-400 border-slate-300 dark:border-slate-700 cursor-pointer"
         >
-        <span class="text-xs font-medium ${t.completed ? 'line-through text-slate-500' : 'text-slate-200'}">
+        <span class="text-xs font-medium ${t.completed ? 'line-through text-slate-400 dark:text-slate-500' : 'text-slate-800 dark:text-slate-200'}">
           ${t.text}
         </span>
       </div>
       <div class="flex items-center gap-2 flex-shrink-0">
         <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${
-          t.priority === 'High' ? 'bg-rose-500/15 text-rose-400 border border-rose-500/30' :
-          t.priority === 'Medium' ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30' :
-          'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
+          t.priority === 'High' ? 'bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30' :
+          t.priority === 'Medium' ? 'bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/30' :
+          'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30'
         }">${t.priority}</span>
-        <button type="button" onclick="deleteTodoItem(${t.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition shadow-xs">
+        <button type="button" onclick="deleteTodoItem(${t.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30 transition shadow-xs">
           <span>🗑️</span> Delete
         </button>
       </div>
@@ -471,9 +471,9 @@ function setTodoFilter(mode) {
   ['All', 'Pending', 'Completed'].forEach(m => {
     const btn = document.getElementById(`todoFilter${m}`);
     if (m.toLowerCase() === mode) {
-      btn.className = "px-2.5 py-1 rounded bg-slate-800 text-white font-bold";
+      btn.className = "px-2.5 py-1 rounded bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-bold shadow-xs";
     } else {
-      btn.className = "px-2.5 py-1 rounded text-slate-400 hover:text-white";
+      btn.className = "px-2.5 py-1 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white";
     }
   });
   renderTodos();
@@ -502,36 +502,36 @@ function renderFlats() {
   }
 
   grid.innerHTML = list.map(f => `
-    <div id="item-flat-${f.id}" class="bg-[#0c1426] border border-slate-800 rounded-card p-4 shadow-sm relative">
+    <div id="item-flat-${f.id}" class="bg-white dark:bg-[#0c1426] border border-slate-200 dark:border-slate-800 rounded-card p-4 shadow-xs relative">
       <div class="flex justify-between items-start mb-2">
         <div>
-          <span class="text-xs font-black font-display text-amber-400 bg-amber-500/15 px-2 py-0.5 rounded-lg border border-amber-500/25">${f.unit_no}</span>
-          <h3 class="text-sm font-bold font-display text-white mt-1.5">${f.owner_name}</h3>
-          <p class="text-[11px] text-slate-400">${f.contact || 'No phone recorded'}</p>
+          <span class="text-xs font-black font-display text-amber-600 dark:text-amber-400 bg-amber-500/15 px-2 py-0.5 rounded-lg border border-amber-500/25">${f.unit_no}</span>
+          <h3 class="text-sm font-bold font-display text-slate-900 dark:text-white mt-1.5">${f.owner_name}</h3>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400">${f.contact || 'No phone recorded'}</p>
         </div>
-        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">${f.status || 'Active'}</span>
+        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">${f.status || 'Active'}</span>
       </div>
 
       <div class="mt-3">
-        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">Custom Specs:</span>
+        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 block mb-1">Custom Specs:</span>
         <div class="flex flex-wrap gap-1">
           ${(f.choices && f.choices.length > 0) ? f.choices.map(c => `
-            <span class="text-[11px] font-medium bg-slate-900 text-slate-300 border border-slate-700 px-2 py-0.5 rounded-lg flex items-center gap-1">
+            <span class="text-[11px] font-medium bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 px-2 py-0.5 rounded-lg flex items-center gap-1">
               <span class="text-amber-500">•</span> ${c}
             </span>
-          `).join('') : '<span class="text-[11px] text-slate-500 italic">Standard builder specifications</span>'}
+          `).join('') : '<span class="text-[11px] text-slate-400 dark:text-slate-500 italic">Standard builder specifications</span>'}
         </div>
       </div>
 
-      <div class="mt-3 pt-2 border-t border-slate-800 text-[11px] text-slate-400">
+      <div class="mt-3 pt-2 border-t border-slate-100 dark:border-slate-800 text-[11px] text-slate-500 dark:text-slate-400">
         ${f.history || 'No milestones logged'}
       </div>
 
-      <div class="no-print mt-3 flex justify-end gap-2 pt-2 border-t border-slate-800/80">
-        <button type="button" onclick="editFlat(${f.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 transition shadow-xs">
+      <div class="no-print mt-3 flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800/80">
+        <button type="button" onclick="editFlat(${f.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30 transition shadow-xs">
           <span>✏️</span> Edit
         </button>
-        <button type="button" onclick="deleteFlat(${f.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition shadow-xs">
+        <button type="button" onclick="deleteFlat(${f.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30 transition shadow-xs">
           <span>🗑️</span> Delete
         </button>
       </div>
@@ -598,13 +598,13 @@ function deleteFlat(id) {
 function renderChoiceTags() {
   const container = document.getElementById('choiceTagsList');
   if (currentChoicesList.length === 0) {
-    container.innerHTML = '<span class="text-slate-500 italic text-[11px]">No specific bullet choices added.</span>';
+    container.innerHTML = '<span class="text-slate-400 dark:text-slate-500 italic text-[11px]">No specific bullet choices added.</span>';
     return;
   }
   container.innerHTML = currentChoicesList.map((tag, idx) => `
-    <span class="inline-flex items-center gap-1 bg-amber-500/15 text-amber-400 border border-amber-500/25 px-2 py-0.5 rounded-md text-[11px] font-medium">
+    <span class="inline-flex items-center gap-1 bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/25 px-2 py-0.5 rounded-md text-[11px] font-medium">
       ${tag}
-      <button type="button" onclick="removeChoiceTag(${idx})" class="hover:text-rose-400 text-xs">✕</button>
+      <button type="button" onclick="removeChoiceTag(${idx})" class="hover:text-rose-600 dark:hover:text-rose-400 text-xs">✕</button>
     </span>
   `).join('');
 }
@@ -655,20 +655,20 @@ function renderPayments() {
   }
 
   tbody.innerHTML = list.map(p => `
-    <tr id="item-payment-${p.id}" class="hover:bg-slate-800/40 transition">
-      <td class="p-3 text-slate-400 font-mono">${p.date}</td>
-      <td class="p-3 font-bold font-mono text-amber-400">${p.voucher_id}</td>
-      <td class="p-3 font-semibold text-white">${p.entity}</td>
-      <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-slate-800 text-[10px] font-semibold text-slate-300">${p.category}</span></td>
-      <td class="p-3 text-slate-400">${p.payment_mode}</td>
-      <td class="p-3 font-bold font-mono text-emerald-400">₹ ${Number(p.amount).toLocaleString('en-IN')}</td>
-      <td class="p-3 text-slate-400 max-w-xs truncate">${p.remarks || '-'}</td>
+    <tr id="item-payment-${p.id}" class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+      <td class="p-3 text-slate-500 dark:text-slate-400 font-mono">${p.date}</td>
+      <td class="p-3 font-bold font-mono text-amber-600 dark:text-amber-400">${p.voucher_id}</td>
+      <td class="p-3 font-semibold text-slate-900 dark:text-white">${p.entity}</td>
+      <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-[10px] font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">${p.category}</span></td>
+      <td class="p-3 text-slate-500 dark:text-slate-400">${p.payment_mode}</td>
+      <td class="p-3 font-bold font-mono text-emerald-600 dark:text-emerald-400">₹ ${Number(p.amount).toLocaleString('en-IN')}</td>
+      <td class="p-3 text-slate-500 dark:text-slate-400 max-w-xs truncate">${p.remarks || '-'}</td>
       <td class="p-3 text-right no-print">
         <div class="inline-flex items-center gap-1.5 justify-end">
-          <button type="button" onclick="editPayment(${p.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 transition shadow-xs">
+          <button type="button" onclick="editPayment(${p.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30 transition shadow-xs">
             <span>✏️</span> Edit
           </button>
-          <button type="button" onclick="deletePayment(${p.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition shadow-xs">
+          <button type="button" onclick="deletePayment(${p.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30 transition shadow-xs">
             <span>🗑️</span> Delete
           </button>
         </div>
@@ -760,18 +760,18 @@ function renderLabour() {
   }
 
   tbody.innerHTML = list.map(l => `
-    <tr id="item-labour-${l.id}" class="hover:bg-slate-800/40 transition">
-      <td class="p-3 text-slate-400 font-mono">${l.date}</td>
-      <td class="p-3 font-bold text-white">${l.person}</td>
-      <td class="p-3 text-slate-300">${l.purpose}</td>
-      <td class="p-3 font-bold font-mono text-rose-400">₹ ${Number(l.amount).toLocaleString('en-IN')}</td>
-      <td class="p-3 text-slate-400">${l.remarks || '-'}</td>
+    <tr id="item-labour-${l.id}" class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+      <td class="p-3 text-slate-500 dark:text-slate-400 font-mono">${l.date}</td>
+      <td class="p-3 font-bold text-slate-900 dark:text-white">${l.person}</td>
+      <td class="p-3 text-slate-700 dark:text-slate-300">${l.purpose}</td>
+      <td class="p-3 font-bold font-mono text-rose-600 dark:text-rose-400">₹ ${Number(l.amount).toLocaleString('en-IN')}</td>
+      <td class="p-3 text-slate-500 dark:text-slate-400">${l.remarks || '-'}</td>
       <td class="p-3 text-right no-print">
         <div class="inline-flex items-center gap-1.5 justify-end">
-          <button type="button" onclick="editLabour(${l.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 transition shadow-xs">
-            <span>✏️️</span> Edit
+          <button type="button" onclick="editLabour(${l.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30 transition shadow-xs">
+            <span>✏️</span> Edit
           </button>
-          <button type="button" onclick="deleteLabour(${l.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition shadow-xs">
+          <button type="button" onclick="deleteLabour(${l.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30 transition shadow-xs">
             <span>🗑️</span> Delete
           </button>
         </div>
@@ -861,20 +861,20 @@ function renderMaterials() {
   }
 
   tbody.innerHTML = list.map(m => `
-    <tr id="item-material-${m.id}" class="hover:bg-slate-800/40 transition">
-      <td class="p-3 text-slate-400 font-mono">${m.date}</td>
-      <td class="p-3 font-bold text-white">${m.name}</td>
-      <td class="p-3 font-bold font-mono text-amber-400">${m.quantity || '-'}</td>
-      <td class="p-3 text-slate-400">${m.supplier}</td>
-      <td class="p-3 text-slate-300">${m.purpose}</td>
-      <td class="p-3 font-bold font-mono text-rose-400">₹ ${Number(m.amount).toLocaleString('en-IN')}</td>
-      <td class="p-3 text-slate-400">${m.remarks || '-'}</td>
+    <tr id="item-material-${m.id}" class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+      <td class="p-3 text-slate-500 dark:text-slate-400 font-mono">${m.date}</td>
+      <td class="p-3 font-bold text-slate-900 dark:text-white">${m.name}</td>
+      <td class="p-3 font-bold font-mono text-amber-600 dark:text-amber-400">${m.quantity || '-'}</td>
+      <td class="p-3 text-slate-500 dark:text-slate-400">${m.supplier}</td>
+      <td class="p-3 text-slate-700 dark:text-slate-300">${m.purpose}</td>
+      <td class="p-3 font-bold font-mono text-rose-600 dark:text-rose-400">₹ ${Number(m.amount).toLocaleString('en-IN')}</td>
+      <td class="p-3 text-slate-500 dark:text-slate-400">${m.remarks || '-'}</td>
       <td class="p-3 text-right no-print">
         <div class="inline-flex items-center gap-1.5 justify-end">
-          <button type="button" onclick="editMaterial(${m.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 transition shadow-xs">
-            <span>✏️</span> Edit
+          <button type="button" onclick="editMaterial(${m.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30 transition shadow-xs">
+            <span>✏️️</span> Edit
           </button>
-          <button type="button" onclick="deleteMaterial(${m.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition shadow-xs">
+          <button type="button" onclick="deleteMaterial(${m.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30 transition shadow-xs">
             <span>🗑️</span> Delete
           </button>
         </div>
@@ -965,17 +965,17 @@ function renderExpenses() {
   }
 
   tbody.innerHTML = list.map(x => `
-    <tr id="item-expense-${x.id}" class="hover:bg-slate-800/40 transition">
-      <td class="p-3 text-slate-400 font-mono">${x.date}</td>
-      <td class="p-3 font-bold text-white">${x.name}</td>
-      <td class="p-3 font-bold font-mono text-rose-400">₹ ${Number(x.amount).toLocaleString('en-IN')}</td>
-      <td class="p-3 text-slate-300">${x.purpose || '-'}</td>
+    <tr id="item-expense-${x.id}" class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+      <td class="p-3 text-slate-500 dark:text-slate-400 font-mono">${x.date}</td>
+      <td class="p-3 font-bold text-slate-900 dark:text-white">${x.name}</td>
+      <td class="p-3 font-bold font-mono text-rose-600 dark:text-rose-400">₹ ${Number(x.amount).toLocaleString('en-IN')}</td>
+      <td class="p-3 text-slate-700 dark:text-slate-300">${x.purpose || '-'}</td>
       <td class="p-3 text-right no-print">
         <div class="inline-flex items-center gap-1.5 justify-end">
-          <button type="button" onclick="editExpense(${x.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 transition shadow-xs">
+          <button type="button" onclick="editExpense(${x.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30 transition shadow-xs">
             <span>✏️</span> Edit
           </button>
-          <button type="button" onclick="deleteExpense(${x.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition shadow-xs">
+          <button type="button" onclick="deleteExpense(${x.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30 transition shadow-xs">
             <span>🗑️</span> Delete
           </button>
         </div>
@@ -1061,30 +1061,30 @@ function renderSnags() {
   }
 
   container.innerHTML = list.map(s => `
-    <div id="item-snag-${s.id}" class="p-3.5 flex items-center justify-between gap-3 hover:bg-slate-800/40 transition">
+    <div id="item-snag-${s.id}" class="p-3.5 flex items-center justify-between gap-3 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
       <div class="flex items-center gap-3">
         <input 
           type="checkbox" 
           ${s.status === 'Completed' ? 'checked' : ''} 
           onchange="toggleSnagStatus(${s.id})" 
-          class="h-4 w-4 rounded text-amber-500 focus:ring-amber-400 border-slate-700 cursor-pointer"
+          class="h-4 w-4 rounded text-amber-500 focus:ring-amber-400 border-slate-300 dark:border-slate-700 cursor-pointer"
         >
         <div>
-          <span class="text-xs font-semibold ${s.status === 'Completed' ? 'line-through text-slate-500' : 'text-white'}">
+          <span class="text-xs font-semibold ${s.status === 'Completed' ? 'line-through text-slate-400 dark:text-slate-500' : 'text-slate-900 dark:text-white'}">
             ${s.title}
           </span>
-          <p class="text-[11px] text-slate-400 mt-0.5">Lead: ${s.assigned_to || 'Unassigned'} • Due: ${s.due_date || 'No target date'}</p>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Lead: ${s.assigned_to || 'Unassigned'} • Due: ${s.due_date || 'No target date'}</p>
         </div>
       </div>
       <div class="flex items-center gap-2">
         <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${
-          s.priority === 'High' ? 'bg-rose-500/15 text-rose-400 border border-rose-500/30' : 'bg-slate-800 text-slate-300'
+          s.priority === 'High' ? 'bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
         }">${s.priority}</span>
-        <button type="button" onclick="editSnag(${s.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 transition shadow-xs">
+        <button type="button" onclick="editSnag(${s.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30 transition shadow-xs">
           <span>✏️</span> Edit
         </button>
-        <button type="button" onclick="deleteSnag(${s.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition shadow-xs">
-          <span>🗑️</span> Delete
+        <button type="button" onclick="deleteSnag(${s.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30 transition shadow-xs">
+          <span>🗑️️</span> Delete
         </button>
       </div>
     </div>
@@ -1314,25 +1314,25 @@ function showRecommendations(query) {
   });
 
   if (matches.length === 0) {
-    box.innerHTML = `<div class="p-3 text-center text-slate-400 text-xs">No direct records found for "${query}"</div>`;
+    box.innerHTML = `<div class="p-3 text-center text-slate-500 text-xs">No direct records found for "${query}"</div>`;
     box.classList.remove('hidden');
     return;
   }
 
   box.innerHTML = matches.slice(0, 8).map(m => `
     <div 
-      class="search-result-row p-2.5 flex items-center justify-between hover:bg-slate-800 cursor-pointer transition text-xs"
+      class="search-result-row p-2.5 flex items-center justify-between hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer transition text-xs"
       data-tab="${m.tab}"
       data-target="${m.targetId}"
     >
       <div class="flex items-center gap-2.5 truncate pointer-events-none">
         <span class="text-sm flex-shrink-0">${m.icon}</span>
         <div class="truncate">
-          <div class="font-bold text-white truncate">${highlightText(m.title, query)}</div>
-          <div class="text-[10px] text-slate-400 truncate">${highlightText(m.subtitle, query)}</div>
+          <div class="font-bold text-slate-900 dark:text-white truncate">${highlightText(m.title, query)}</div>
+          <div class="text-[10px] text-slate-500 dark:text-slate-400 truncate">${highlightText(m.subtitle, query)}</div>
         </div>
       </div>
-      <span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 tracking-wider ml-2 flex-shrink-0 pointer-events-none">${m.tag}</span>
+      <span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 tracking-wider ml-2 flex-shrink-0 pointer-events-none">${m.tag}</span>
     </div>
   `).join('');
 
@@ -1369,7 +1369,7 @@ function highlightText(text, query) {
   if (!query || !text) return text || '';
   try {
     const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-    return String(text).replace(regex, '<mark class="bg-amber-500/30 text-amber-300 font-bold px-0.5 rounded">$1</mark>');
+    return String(text).replace(regex, '<mark class="bg-amber-500/30 text-amber-700 dark:text-amber-300 font-bold px-0.5 rounded">$1</mark>');
   } catch (e) {
     return text;
   }
@@ -1415,14 +1415,14 @@ function switchTab(tab) {
   currentTab = tab;
   document.querySelectorAll('.tab-view').forEach(v => v.classList.add('hidden'));
   document.querySelectorAll('.tab-button').forEach(b => {
-    b.className = "tab-button flex items-center gap-1.5 px-3.5 py-2 rounded-lg whitespace-nowrap text-slate-400 hover:text-white transition";
+    b.className = "tab-button flex items-center gap-1.5 px-3.5 py-2 rounded-lg whitespace-nowrap text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition";
   });
 
   const activeView = document.getElementById(`view-${tab}`);
   const activeBtn = document.getElementById(`tab-${tab}`);
   if (activeView) activeView.classList.remove('hidden');
   if (activeBtn) {
-    activeBtn.className = "tab-button flex items-center gap-1.5 px-3.5 py-2 rounded-lg whitespace-nowrap bg-slate-800 text-white shadow-xs font-bold transition";
+    activeBtn.className = "tab-button flex items-center gap-1.5 px-3.5 py-2 rounded-lg whitespace-nowrap bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs font-bold transition";
   }
 }
 
@@ -1432,22 +1432,26 @@ function toggleTheme() {
   if (isDark) {
     html.classList.remove('dark');
     localStorage.setItem('shc_theme', 'light');
-    document.getElementById('themeIcon').innerText = '🌙';
+    const icon = document.getElementById('themeIcon');
+    if (icon) icon.innerText = '🌙';
   } else {
     html.classList.add('dark');
     localStorage.setItem('shc_theme', 'dark');
-    document.getElementById('themeIcon').innerText = '☀️';
+    const icon = document.getElementById('themeIcon');
+    if (icon) icon.innerText = '☀️';
   }
+  renderSparkline();
 }
 
 function initTheme() {
   const saved = localStorage.getItem('shc_theme') || 'dark';
+  const icon = document.getElementById('themeIcon');
   if (saved === 'dark') {
     document.documentElement.classList.add('dark');
-    document.getElementById('themeIcon').innerText = '☀️';
+    if (icon) icon.innerText = '☀️';
   } else {
     document.documentElement.classList.remove('dark');
-    document.getElementById('themeIcon').innerText = '🌙';
+    if (icon) icon.innerText = '🌙';
   }
 }
 
