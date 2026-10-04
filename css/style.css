@@ -1,9 +1,13 @@
-/* Human-First Typography & Precise Metrics */
+/* Typography & Numerical Feature Settings */
 body {
   font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
 }
 
-/* SHC Brand Logo: Bold Black Letters on Warm Radiant Accent Gradient */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* SHC Brand Logo: Bold Monogram with Warm Radiant Gradient */
 .shc-brand-logo {
   background: linear-gradient(135deg, #FFC700 0%, #FF9900 50%, #FF5A00 100%);
   position: relative;
@@ -19,34 +23,28 @@ body {
   pointer-events: none;
 }
 
-/* Tabular Mono Alignment */
-.tabular-nums {
-  font-variant-numeric: tabular-nums;
-}
-
-/* Responsive Table Horizontal Scrolling */
-.table-scroll-container {
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Soft Transition Controls */
+/* Smooth Interactive Elements & Cards */
 .tab-button {
   transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Search Focus Glow Animation */
+.table-scroll-container {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Search Redirection Target Pulse Glow */
 .search-target-highlight {
   animation: searchGlow 2.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes searchGlow {
   0% {
-    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.8);
-    background-color: rgba(245, 158, 11, 0.14);
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.85);
+    background-color: rgba(245, 158, 11, 0.18);
   }
   50% {
-    box-shadow: 0 0 0 8px rgba(245, 158, 11, 0);
-    background-color: rgba(245, 158, 11, 0.05);
+    box-shadow: 0 0 0 10px rgba(245, 158, 11, 0);
+    background-color: rgba(245, 158, 11, 0.06);
   }
   100% {
     box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
@@ -54,7 +52,7 @@ body {
 }
 
 /* ========================================================= */
-/* LEGITIMATE EXECUTIVE AUDIT PRINT FORMAT (A4)              */
+/* LEGITIMATE EXECUTIVE AUDIT PRINT FORMAT (A4 PORTRAIT)     */
 /* ========================================================= */
 @media screen {
   .print-only {
@@ -77,11 +75,14 @@ body {
     print-color-adjust: exact !important;
   }
 
+  /* Strip all interactive UI elements */
   .no-print,
   header,
   nav,
   .tab-button,
   #dataActionsBtn,
+  #debitQuickBtn,
+  #debitQuickMenu,
   #activeFilterPill,
   .modal-backdrop,
   #toastNotification,
@@ -92,16 +93,19 @@ body {
     display: none !important;
   }
 
+  /* Display dedicated audit header and signatures */
   .print-only {
     display: block !important;
   }
 
+  /* Render all ledger views sequentially */
   .tab-view {
     display: block !important;
     page-break-inside: auto;
     margin-bottom: 1.5rem !important;
   }
 
+  /* Formal Table Typography */
   table {
     width: 100% !important;
     border-collapse: collapse !important;
@@ -152,6 +156,7 @@ body {
     margin-bottom: 6px !important;
   }
 
+  /* Sign-Off Verification Blocks */
   .audit-signatures {
     page-break-inside: avoid;
     margin-top: 28px;

@@ -1,10 +1,10 @@
 /**
  * Sri Harshitha Constructions Log Report - Application Controller
- * Live Two-Way Cloud Sync with Google Apps Script, Fault-Tolerant Search & Smooth Redirection
+ * Live Two-Way Cloud Sync with Google Apps Script, Fault-Tolerant Search & Styled Action Buttons
  */
 
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRw42iwcsYINjZhcxutFKWB1CcPZELYyc9QZyZ_cNsj7nt9FEBDDxD_qGPfVJ-Rbpu/exec";
-const STORAGE_KEY = 'shc_prod_clean_db_v3';
+const STORAGE_KEY = 'shc_prod_clean_db_v4';
 
 // Clean State Initialized Empty
 let state = {
@@ -414,7 +414,9 @@ function renderTodos() {
           t.priority === 'Medium' ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30' :
           'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
         }">${t.priority}</span>
-        <button type="button" onclick="deleteTodoItem(${t.id})" class="text-slate-500 hover:text-rose-400 text-xs px-1">✕</button>
+        <button type="button" onclick="deleteTodoItem(${t.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition shadow-xs">
+          <span>🗑️</span> Delete
+        </button>
       </div>
     </div>
   `).join('');
@@ -525,9 +527,13 @@ function renderFlats() {
         ${f.history || 'No milestones logged'}
       </div>
 
-      <div class="no-print mt-3 flex justify-end gap-2.5">
-        <button type="button" onclick="editFlat(${f.id})" class="text-slate-400 hover:text-amber-400 text-xs font-semibold">Edit</button>
-        <button type="button" onclick="deleteFlat(${f.id})" class="text-slate-500 hover:text-rose-400 text-xs font-semibold">Delete</button>
+      <div class="no-print mt-3 flex justify-end gap-2 pt-2 border-t border-slate-800/80">
+        <button type="button" onclick="editFlat(${f.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 transition shadow-xs">
+          <span>✏️</span> Edit
+        </button>
+        <button type="button" onclick="deleteFlat(${f.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition shadow-xs">
+          <span>🗑️</span> Delete
+        </button>
       </div>
     </div>
   `).join('');
@@ -658,8 +664,14 @@ function renderPayments() {
       <td class="p-3 font-bold font-mono text-emerald-400">₹ ${Number(p.amount).toLocaleString('en-IN')}</td>
       <td class="p-3 text-slate-400 max-w-xs truncate">${p.remarks || '-'}</td>
       <td class="p-3 text-right no-print">
-        <button type="button" onclick="editPayment(${p.id})" class="text-slate-400 hover:text-amber-400 mr-2">Edit</button>
-        <button type="button" onclick="deletePayment(${p.id})" class="text-slate-500 hover:text-rose-400">Delete</button>
+        <div class="inline-flex items-center gap-1.5 justify-end">
+          <button type="button" onclick="editPayment(${p.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 transition shadow-xs">
+            <span>✏️</span> Edit
+          </button>
+          <button type="button" onclick="deletePayment(${p.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition shadow-xs">
+            <span>🗑️</span> Delete
+          </button>
+        </div>
       </td>
     </tr>
   `).join('');
@@ -755,8 +767,14 @@ function renderLabour() {
       <td class="p-3 font-bold font-mono text-rose-400">₹ ${Number(l.amount).toLocaleString('en-IN')}</td>
       <td class="p-3 text-slate-400">${l.remarks || '-'}</td>
       <td class="p-3 text-right no-print">
-        <button type="button" onclick="editLabour(${l.id})" class="text-slate-400 hover:text-amber-400 mr-2">Edit</button>
-        <button type="button" onclick="deleteLabour(${l.id})" class="text-slate-500 hover:text-rose-400">Delete</button>
+        <div class="inline-flex items-center gap-1.5 justify-end">
+          <button type="button" onclick="editLabour(${l.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 transition shadow-xs">
+            <span>✏️️</span> Edit
+          </button>
+          <button type="button" onclick="deleteLabour(${l.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition shadow-xs">
+            <span>🗑️</span> Delete
+          </button>
+        </div>
       </td>
     </tr>
   `).join('');
@@ -852,8 +870,14 @@ function renderMaterials() {
       <td class="p-3 font-bold font-mono text-rose-400">₹ ${Number(m.amount).toLocaleString('en-IN')}</td>
       <td class="p-3 text-slate-400">${m.remarks || '-'}</td>
       <td class="p-3 text-right no-print">
-        <button type="button" onclick="editMaterial(${m.id})" class="text-slate-400 hover:text-amber-400 mr-2">Edit</button>
-        <button type="button" onclick="deleteMaterial(${m.id})" class="text-slate-500 hover:text-rose-400">Delete</button>
+        <div class="inline-flex items-center gap-1.5 justify-end">
+          <button type="button" onclick="editMaterial(${m.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 transition shadow-xs">
+            <span>✏️</span> Edit
+          </button>
+          <button type="button" onclick="deleteMaterial(${m.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition shadow-xs">
+            <span>🗑️</span> Delete
+          </button>
+        </div>
       </td>
     </tr>
   `).join('');
@@ -947,8 +971,14 @@ function renderExpenses() {
       <td class="p-3 font-bold font-mono text-rose-400">₹ ${Number(x.amount).toLocaleString('en-IN')}</td>
       <td class="p-3 text-slate-300">${x.purpose || '-'}</td>
       <td class="p-3 text-right no-print">
-        <button type="button" onclick="editExpense(${x.id})" class="text-slate-400 hover:text-amber-400 mr-2">Edit</button>
-        <button type="button" onclick="deleteExpense(${x.id})" class="text-slate-500 hover:text-rose-400">Delete</button>
+        <div class="inline-flex items-center gap-1.5 justify-end">
+          <button type="button" onclick="editExpense(${x.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 transition shadow-xs">
+            <span>✏️</span> Edit
+          </button>
+          <button type="button" onclick="deleteExpense(${x.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition shadow-xs">
+            <span>🗑️</span> Delete
+          </button>
+        </div>
       </td>
     </tr>
   `).join('');
@@ -1050,8 +1080,12 @@ function renderSnags() {
         <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${
           s.priority === 'High' ? 'bg-rose-500/15 text-rose-400 border border-rose-500/30' : 'bg-slate-800 text-slate-300'
         }">${s.priority}</span>
-        <button type="button" onclick="editSnag(${s.id})" class="text-slate-400 hover:text-amber-400 text-xs px-1">Edit</button>
-        <button type="button" onclick="deleteSnag(${s.id})" class="text-slate-500 hover:text-rose-400 text-xs px-1">✕</button>
+        <button type="button" onclick="editSnag(${s.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 transition shadow-xs">
+          <span>✏️</span> Edit
+        </button>
+        <button type="button" onclick="deleteSnag(${s.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition shadow-xs">
+          <span>🗑️</span> Delete
+        </button>
       </div>
     </div>
   `).join('');
