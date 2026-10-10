@@ -4,7 +4,7 @@
  */
 
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRw42iwcsYINjZhcxutFKWB1CcPZELYyc9QZyZ_cNsj7nt9FEBDDxD_qGPfVJ-Rbpu/exec";
-const STORAGE_KEY = 'shc_prod_clean_db_v5';
+const STORAGE_KEY = 'shc_prod_clean_db_v6';
 
 // Clean State Initialized Empty
 let state = {
@@ -114,40 +114,90 @@ async function fetchMasterFromGoogleSheets() {
     const res = await fetch(GOOGLE_SCRIPT_URL);
     const data = await res.json();
 
+    // 1. Process Flats first so we can map flat_id to real owner names
     if (data.flats && data.flats.length) {
       state.flats = data.flats.map(f => ({
-        ...f,
-        choices: typeof f.choices === 'string' ? f.choices.split(',').map(s => s.trim()).filter(Boolean) : (f.choices || [])
+        id: f.id || Date.now(),
+        unit_no: String(f.unit_no || ''),
+        owner_name: f.owner_name || 'Allottee',
+        contact: f.contact || '',
+        status: f.status || 'Active',
+        choices: typeof f.choices === 'string' ? f.choices.split(',').map(s => s.trim()).filter(Boolean) : (f.choices || []),
+        history: f.history || ''
       }));
     }
-    if (data.payments && data.payments.length) state.payments = data.payments;
+
+    // 2. Process Payments (Resolves 'entity' from flat_id and cleans up ISO timestamps)
+    if (data.payments && data.payments.length) {
+      state.payments = data.payments.map(p => {
+        // Format ISO timestamp (e.g. 2026-09-27T18:30:00.000Z) to standard YYYY-MM-DD
+        let formattedDate = new Date().toISOString().slice(0, 10);
+        if (p.date) {
+          try {
+            const d = new Date(p.date);
+            formattedDate = !isNaN(d.getTime()) ? d.toISOString().slice(0, 10) : String(p.date).slice(0, 10);
+          } catch (e) {
+            formattedDate = String(p.date).slice(0, 10);
+          }
+        }
+
+        // Match flat_id to unit number and owner name to avoid "undefined"
+        let entityName = p.entity || p.payee;
+        if (!entityName && p.flat_id !== undefined && p.flat_id !== null && p.flat_id !== '') {
+          const matched = state.flats.find(f => String(f.id) === String(p.flat_id) || String(f.unit_no) === String(p.flat_id));
+          entityName = matched ? `Unit ${matched.unit_no} (${matched.owner_name})` : `Unit #${p.flat_id}`;
+        }
+
+        return {
+          id: p.id || Date.now() + Math.random(),
+          date: formattedDate,
+          voucher_id: String(p.voucher_id !== undefined && p.voucher_id !== null ? p.voucher_id : `SHC-PAY-${Math.floor(1000 + Math.random() * 9000)}`),
+          entity: entityName || 'General Payee',
+          amount: Number(p.amount) || 0,
+          category: p.category || 'Maintenance Milestone',
+          payment_mode: p.payment_mode || 'NEFT / RTGS',
+          remarks: p.remarks || '-'
+        };
+      });
+    }
+
+    // 3. Daily Site Logs (Labour, Materials, Expenses)
     if (data.siteLogs && data.siteLogs.length) {
-      state.labour = data.siteLogs.filter(s => s.category === 'Labour').map(s => ({
-        id: s.id,
-        date: s.date,
-        person: s.item_or_role || s.person || '',
-        purpose: s.remarks || '',
-        amount: Number(s.total || s.amount) || 0,
-        remarks: s.remarks || ''
-      }));
-      state.materials = data.siteLogs.filter(s => s.category === 'Material').map(s => ({
-        id: s.id,
-        date: s.date,
-        name: s.item_or_role || s.name || '',
-        quantity: s.quantity || s.qty || s.unit || '1 Unit',
-        supplier: s.vendor_or_worker || s.supplier || '',
-        purpose: s.remarks || '',
-        amount: Number(s.total || s.amount) || 0,
-        remarks: s.remarks || ''
-      }));
-      state.expenses = data.siteLogs.filter(s => s.category === 'Expense' || s.category === 'Other Expenses').map(s => ({
-        id: s.id,
-        date: s.date,
-        name: s.item_or_role || s.name || '',
-        amount: Number(s.total || s.amount) || 0,
-        purpose: s.remarks || ''
-      }));
+      state.labour = data.siteLogs
+        .filter(s => s.category === 'Labour')
+        .map(s => ({
+          id: s.id || Date.now() + Math.random(),
+          date: s.date ? String(s.date).slice(0, 10) : new Date().toISOString().slice(0, 10),
+          person: s.item_or_role || s.vendor_or_worker || 'Labour Crew',
+          purpose: s.remarks || 'Site civil works',
+          amount: Number(s.total ?? s.amount ?? 0) || 0,
+          remarks: s.remarks || '-'
+        }));
+
+      state.materials = data.siteLogs
+        .filter(s => s.category === 'Material')
+        .map(s => ({
+          id: s.id || Date.now() + Math.random(),
+          date: s.date ? String(s.date).slice(0, 10) : new Date().toISOString().slice(0, 10),
+          name: s.item_or_role || 'Material',
+          quantity: s.qty || s.quantity || '1 Unit',
+          supplier: s.vendor_or_worker || 'Supplier',
+          purpose: s.remarks || 'Construction Placement',
+          amount: Number(s.total ?? s.amount ?? 0) || 0,
+          remarks: s.remarks || '-'
+        }));
+
+      state.expenses = data.siteLogs
+        .filter(s => s.category === 'Expense' || s.category === 'Other Expenses')
+        .map(s => ({
+          id: s.id || Date.now() + Math.random(),
+          date: s.date ? String(s.date).slice(0, 10) : new Date().toISOString().slice(0, 10),
+          name: s.item_or_role || 'Site Expense',
+          amount: Number(s.total ?? s.amount ?? 0) || 0,
+          purpose: s.remarks || 'General'
+        }));
     }
+
     if (data.tasks && data.tasks.length) state.snags = data.tasks;
 
     saveState();
@@ -872,7 +922,7 @@ function renderMaterials() {
       <td class="p-3 text-right no-print">
         <div class="inline-flex items-center gap-1.5 justify-end">
           <button type="button" onclick="editMaterial(${m.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30 transition shadow-xs">
-            <span>✏️️</span> Edit
+            <span>✏️</span> Edit
           </button>
           <button type="button" onclick="deleteMaterial(${m.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30 transition shadow-xs">
             <span>🗑️</span> Delete
@@ -1084,7 +1134,7 @@ function renderSnags() {
           <span>✏️</span> Edit
         </button>
         <button type="button" onclick="deleteSnag(${s.id})" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30 transition shadow-xs">
-          <span>🗑️️</span> Delete
+          <span>🗑</span> Delete
         </button>
       </div>
     </div>
